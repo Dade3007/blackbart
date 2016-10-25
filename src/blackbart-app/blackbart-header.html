@@ -1,0 +1,117 @@
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
+
+<dom-module id="blackbart-header">
+  <style include="iron-flex"></style>
+  <template>
+    <style>
+
+      :host {
+        display: block;
+        margin-bottom: 15px;
+        --paper-tabs-selection-bar-color: #775D94;
+        --paper-tab-ink: #775D94;
+      }
+
+      paper-toolbar{
+        background-color: white;
+        color:black;
+      }
+
+      paper-tab{
+        color: #775D94;
+      }
+
+      #header{
+        height: 65px;
+      }
+
+      h1{
+        color: #775D94;
+        font-family:'Sacramento';
+        position: relative;
+        top: 3px;
+        margin:auto;
+        display: inline-block;
+        text-align: center;
+      }
+
+      paper-tabs{
+        max-width: 1000px;
+        margin: auto;
+      }
+
+      paper-button{
+        color: #775D94;
+      }
+
+    </style>
+  
+      <div id="header" class="layout horizontal">
+        <paper-button>
+          <iron-icon icon="icons:menu"></iron-icon>
+        </paper-button>  
+    
+        <h1 class="flex" main-title on-tap="_goHome">[[name]]</h1>
+
+        <paper-button>
+          <iron-icon icon="icons:shopping-cart"></iron-icon>
+        </paper-button>
+      
+        
+      </div>
+        <paper-tabs selected="{{selected}}">
+          <paper-tab>Camisas</paper-tab>
+          <paper-tab>Pantalones</paper-tab>
+          <paper-tab>Faldas</paper-tab>
+          <paper-tab>Blusas</paper-tab>
+          <paper-tab>Bolsos</paper-tab>
+        </paper-tabs>
+
+    
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'blackbart-header',
+      listeners: {
+
+      },
+      observers: [
+        "_tabChange(selected)"
+      ],
+      properties: {
+        name: {
+          type: String,
+          value: 'CANELA'
+        },       
+        selected: {
+          type: Object,
+          notify: true
+        }         
+      },
+
+      _tabChange: function(){
+        this.fire("tab-change", {tabSelected: this.selected})
+      },
+      _goHome: function(){
+        this.fire("go-home")
+      }
+
+
+    });
+       
+  </script>
+</dom-module>

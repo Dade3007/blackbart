@@ -1,0 +1,67 @@
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
+
+
+<dom-module id="blackbart-home-card">
+  <template>
+    <style>
+
+
+      :host {
+        width: 100%;
+        margin-bottom: 20px;
+        --paper-button-ink-color: purple;
+      }    
+
+      paper-button{
+        border: 2px solid #775D94;
+        color: #775D94;
+      }
+
+      img{
+        width:100%;
+      }
+
+     #homeCardContainer{
+      margin-bottom:20px;
+     }
+
+      #homeCardFooter{
+        font-family: 'Slabo 27px', serif;
+        text-align: center;
+      } 
+
+      #homeCardFooter #section{
+        color: #775D94;
+        margin: 15px 0;
+      }
+
+    </style>
+  
+    <div id="homeCardContainer">
+      <img src="[[image]]" alt="[[section]]">
+      <div id="homeCardFooter">
+        <div id="section">[[section]]</div>
+        <div>
+          <paper-button>SHOW MORE</paper-button>
+        </div>
+      </div>
+    </div>
+   
+    
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'blackbart-home-card',
+
+      properties: {
+        section: String,
+        image: String
+      },
+
+    });
+
+  </script>
+</dom-module>

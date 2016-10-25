@@ -1,0 +1,17 @@
+{
+  "name": "blackbart",
+  "version": "1.0.0",
+  "description": "shop template",
+  "main": "index.html",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dade3007@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "bower": "^1.7.9"
+  }
+}

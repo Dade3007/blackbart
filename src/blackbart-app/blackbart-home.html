@@ -1,0 +1,79 @@
+<link rel="import" href="./blackbart-home-card.html">
+
+
+<dom-module id="blackbart-home">
+  <template>
+    <style>
+      :host {}  
+
+      .small{
+        display: inline-block;
+        width:49.5%;
+      }   
+
+      .small:nth-child(odd){
+      }
+
+      .small:nth-child(even){
+        float: right;
+      }
+
+     
+
+    </style>
+
+    <template is="dom-repeat" items="{{sections.big}}">
+      <blackbart-home-card section="{{item.name}}" image="{{item.img}}"></blackbart-home-card>
+    </template>
+  
+    <template is="dom-repeat" items="{{sections.small}}">
+      <blackbart-home-card section="{{item.name}}" image="{{item.img}}" class="small"></blackbart-home-card>
+    </template>
+    
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'blackbart-home',
+
+      properties: {
+        sections : {
+          type: Object,
+          value: {
+            big: [
+              { 
+                name: 'Chaquetas',
+                img: '/assets/images/ladies_outerwear.jpg'
+              },
+              { 
+                name: 'Camisetas mujer',
+                img: '/assets/images/ladies_tshirts.jpg'
+              }
+            ],
+            small: [
+              { 
+                name: 'Camisetas hombre',
+                img: '/assets/images/mens_outerwear.jpg'
+              },
+              { 
+                name: 'Gabardinas',
+                img: '/assets/images/mens_tshirts.jpg'
+              },
+              { 
+                name: 'Chaquetas',
+                img: '/assets/images/ladies_outerwear.jpg'
+              },
+              { 
+                name: 'Pantalones',
+                img: '/assets/images/ladies_outerwear.jpg'
+              }
+            ]
+          }
+        }
+      },
+
+    });
+
+  </script>
+</dom-module>

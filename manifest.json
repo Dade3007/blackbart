@@ -1,0 +1,7 @@
+{
+  "name": "blackbart",
+  "short_name": "blackbart",
+  "description": "shop template",
+  "start_url": "/",
+  "display": "standalone"
+}

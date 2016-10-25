@@ -1,0 +1,76 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+
+<link rel="import" href="./blackbart-home.html">
+<link rel="import" href="./blackbart-header.html">
+<link rel="import" href="./blackbart-footer.html">
+
+<link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
+
+<dom-module id="blackbart-app">
+  <template>
+    <style>
+      :host {}   
+
+      #mainContent{
+        margin:0 auto;
+        max-width: 1440px;
+        height: auto;
+      }
+
+    </style>
+  
+    <blackbart-header selected="{{currentTab}}"></blackbart-header>
+    <div id="mainContent">
+      <iron-pages selected="[[currentPage]]">
+        <div>
+           <blackbart-home></blackbart-home>
+        </div>
+        <div>
+          <blackbart-section></blackbart-section>
+        </div>
+        <div>Three</div>
+      </iron-pages>      
+    </div>
+
+
+      
+
+    <blackbart-footer></blackbart-footer>
+   
+    
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'blackbart-app',
+      listeners: {
+        "tab-change" : "changeTab",
+        "go-home" : "goHome"
+      },
+      properties: {
+        currentPage: {
+          type : Number,
+          value : 0           
+        },
+        currentTab: {
+          type : Number
+        },
+      },
+    
+
+      changeTab: function(detail){
+        console.log("changed tab")
+        this.currentPage = detail.tabSelected + 1;
+      },
+
+      goHome: function(){
+        this.currentPage = 0;
+      }
+
+    });
+
+  </script>
+</dom-module>

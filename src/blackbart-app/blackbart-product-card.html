@@ -1,0 +1,67 @@
+<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
+
+
+<dom-module id="blackbart-product-card">
+  <template>
+    <style>
+      :host {
+
+      }    
+
+      #container{
+
+        padding:20px;
+        display: inline-block;
+        text-align: center;
+        margin: 0 37px 0px 37px;
+        cursor: pointer;
+      }
+
+      img{
+        margin-bottom: 30px;
+        height: 300px;
+        width: 300px;
+      }
+
+      span{
+        display: block;
+        font-family: 'Slabo 27px', serif;
+      }
+
+      #description{
+        font-weight: bold;
+      }
+
+      @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+        #container{
+          margin: 0px;
+          }
+      }
+
+    </style>
+
+   <div id="container">
+    <img src="[[image]]" alt="[[title]]">
+    <div>
+      <span id="description">[[title]]</span>
+      <span>[[price]]</span>
+    </div>
+   </div>
+    
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'blackbart-product-card',
+
+      properties: {
+        title: String,
+        image: String,
+        price: String,
+      }
+
+    });
+
+  </script>
+</dom-module>

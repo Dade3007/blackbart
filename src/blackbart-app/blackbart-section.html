@@ -1,4 +1,5 @@
 <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
+<link rel="import" href="./blackbart-product-card.html">
 
 
 <dom-module id="blackbart-section">
@@ -7,12 +8,53 @@
       :host {
 
       }    
+
+      img{
+        width: 100%;
+      }
+
+      #productsContainer{
+        text-align: center;
+      }
+
+      span{
+        display: block;
+        font-family: 'Slabo 27px', serif;
+      }
+
+      #productsHeader{
+        text-align: center;
+      }
+
+      #counter{
+        font-size: 13px;
+      }
+
+      @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+        .sm-hide{
+          display: none;
+        }
+      }
      
     </style>
   
-    <img src="[[image]]" alt="[[section]]">
-    <div>
-      
+    <img src="[[image]]" alt="[[title]]" class="sm-hide">
+    <div id="productsHeader">
+      <span>[[title]]</span>
+      <span id="counter">(9 productos)</span>
+    </div>
+    <div id="productsContainer">
+      <blackbart-product-card image="/assets/images/10-24102B.jpg" title="Ladies Modern Stretch Full Zip" price="39.99 €"></blackbart-product-card>
+      <blackbart-product-card image="/assets/images/10-25058A.jpg" title="Ladies Colorblock Wind Jacket" price="44.99 €"></blackbart-product-card>
+      <blackbart-product-card image="/assets/images/10-24101B.jpg" title="Ladies Voyage Fleece Jacket" price="39.99 €"></blackbart-product-card>
+
+      <blackbart-product-card image="/assets/images/10-24102B.jpg" title="Ladies Modern Stretch Full Zip" price="39.99 €"></blackbart-product-card>
+      <blackbart-product-card image="/assets/images/10-25058A.jpg" title="Ladies Colorblock Wind Jacket" price="44.99 €"></blackbart-product-card>
+      <blackbart-product-card image="/assets/images/10-24101B.jpg" title="Ladies Voyage Fleece Jacket" price="39.99 €"></blackbart-product-card>  
+
+      <blackbart-product-card image="/assets/images/10-24102B.jpg" title="Ladies Modern Stretch Full Zip" price="39.99 €"></blackbart-product-card>
+      <blackbart-product-card image="/assets/images/10-25058A.jpg" title="Ladies Colorblock Wind Jacket" price="44.99 €"></blackbart-product-card>
+      <blackbart-product-card image="/assets/images/10-24101B.jpg" title="Ladies Voyage Fleece Jacket" price="39.99 €"></blackbart-product-card>
     </div>
     
    
@@ -27,7 +69,7 @@
       properties: {
         title: String,
         image: String
-      },
+      }
 
     });
 

@@ -2,116 +2,143 @@
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
-
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-
-
-
-
 <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
-
 <dom-module id="blackbart-header">
-  <style include="iron-flex"></style>
-  <template>
-    <style>
-
-      :host {
-        display: block;
-        margin-bottom: 15px;
-        --paper-tabs-selection-bar-color: #775D94;
-        --paper-tab-ink: #775D94;
-      }
-
-      paper-toolbar{
-        background-color: white;
-        color:black;
-      }
-
-      paper-tab{
-        color: #775D94;
-      }
-
-      #header{
-        height: 65px;
-      }
-
-      h1{
-        color: #775D94;
-        font-family:'Sacramento';
-        position: relative;
-        top: 3px;
-        margin:auto;
-        display: inline-block;
-        text-align: center;
-      }
-
-      paper-tabs{
-        max-width: 1000px;
-        margin: auto;
-      }
-
-      paper-button{
-        color: #775D94;
-      }
-
-    </style>
-  
-      <div id="header" class="layout horizontal">
-        <paper-button>
-          <iron-icon icon="icons:menu"></iron-icon>
-        </paper-button>  
-    
-        <h1 class="flex" main-title on-tap="_goHome">[[name]]</h1>
-
-        <paper-button>
-          <iron-icon icon="icons:shopping-cart"></iron-icon>
-        </paper-button>
-      
+    <style include="iron-flex"></style>
+    <template>
+        <style>
+        :host {
+            display: block;
+            margin-bottom: 15px;
+            --paper-tabs-selection-bar-color: var(--primary-color);
+            --paper-tab-ink: var(--primary-color);
+        }
         
-      </div>
-        <paper-tabs selected="{{selected}}">
-          <paper-tab>Chaquetas</paper-tab>
-          <paper-tab>Camisas</paper-tab>
-          <paper-tab>Faldas</paper-tab>
-          <paper-tab>Blusas</paper-tab>
-          <paper-tab>Bolsos</paper-tab>
+        paper-toolbar {
+            background-color: white;
+            color: black;
+        }
+        
+        paper-tab {
+            color: var(--primary-color);
+        }
+        
+        #header {
+            height: 65px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-family: 'Sacramento';
+            position: relative;
+            top: 3px;
+            margin: auto;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        paper-tabs {
+            max-width: 1000px;
+            margin: auto;
+        }
+        
+        paper-button {
+            color: var(--primary-color);
+        }
+        
+        .hide {
+            display: none !important;
+        }
+        
+        @media only screen and (min-device-width: 480px) {
+            #iconMenu {
+                display: none;
+            }
+        }
+        
+        @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+            #iconHome {
+                display: none;
+            }
+            #iconMenu {
+                display: inline-block !important;
+            }
+            #headerTabs {
+                display: none;
+            }
+            .left-content {
+                text-align: center;
+            }
+            .left-content iron-icon {
+                position: relative;
+                top: 10px;
+            }
+        }
+        </style>
+        <div id="header" class="layout horizontal">
+            <paper-button id="iconMenu" class="hide left-content" on-tap="_toggleMenu">
+                <iron-icon icon="icons:menu"></iron-icon>
+            </paper-button>
+            <paper-button id="iconHome" class="hide left-content" on-tap="_goHome">
+                <iron-icon icon="icons:home"></iron-icon>
+            </paper-button>
+            <h1 class="flex" main-title on-tap="_goHome">[[name]]</h1>
+            <paper-button>
+                <iron-icon icon="icons:shopping-cart"></iron-icon>
+            </paper-button>
+        </div>
+        <paper-tabs id="headerTabs" selected="{{selected}}">
+            <paper-tab>Chaquetas</paper-tab>
+            <paper-tab>Camisas</paper-tab>
+            <paper-tab>Faldas</paper-tab>
+            <paper-tab>Blusas</paper-tab>
+            <paper-tab>Bolsos</paper-tab>
         </paper-tabs>
-
-    
-  </template>
-
-  <script>
+    </template>
+    <script>
     Polymer({
-
-      is: 'blackbart-header',
-      listeners: {
-
-      },
-      observers: [
-        "_tabChange(selected)"
-      ],
-      properties: {
-        name: {
-          type: String,
-          value: 'CANELA'
-        },       
-        selected: {
-          type: Object,
-          notify: true
-        }         
-      },
-
-      _tabChange: function(){
-        this.fire("tab-change", {tabSelected: this.selected})
-      },
-      _goHome: function(){
-        this.fire("go-home")
-      }
-
-
+        is: 'blackbart-header',
+        listeners: {},
+        observers: [
+            "_tabChange(selected)"
+        ],
+        listeners: {
+            "toggle-menu-icon": "_toogleMenuIcon"
+        },
+        properties: {
+            name: {
+                type: String,
+                value: 'CANELA'
+            },
+            selected: {
+                type: Object,
+                notify: true
+            }
+        },
+        _toggleMenu: function() {
+            this.fire("toggle-menu");
+        },
+        _tabChange: function(selected) {
+                if (selected == undefined) {
+                    if (this.$.iconHome.className.indexOf('hide') == -1) {
+                        this.$.iconHome.className = this.$.iconHome.className + ' hide';
+                    }
+                } else {
+                    if (this.$.iconHome.className.indexOf('hide') > -1) {
+                        this.$.iconHome.className = this.$.iconHome.className.replace(/hide/, '');
+                    }
+                }
+            
+            this.fire("tab-change", {
+                tabSelected: this.selected
+            })
+        },
+        _goHome: function() {
+            this.fire("go-home");
+        }
     });
-       
-  </script>
+    </script>
 </dom-module>

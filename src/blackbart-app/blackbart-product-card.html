@@ -40,7 +40,7 @@
 
     </style>
 
-   <div id="container">
+   <div id="container" on-tap="showProduct" productid$="{{productid}}">
     <img src="[[image]]" alt="[[title]]">
     <div>
       <span id="description">[[title]]</span>
@@ -59,6 +59,11 @@
         title: String,
         image: String,
         price: String,
+        productid: String
+      },
+
+      showProduct: function(){
+        this.fire('go-to-page', {page: 1, routeName: "product"});
       }
 
     });

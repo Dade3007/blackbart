@@ -1,14 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
-<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="./blackbart-home.html">
-<link rel="import" href="./blackbart-section.html">
-<link rel="import" href="./blackbart-header.html">
-<link rel="import" href="./blackbart-footer.html">
+<link rel="import" href="./blackbart-main-page.html">
+<link rel="import" href="./blackbart-product-page.html">
+
+
 <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
 <dom-module id="blackbart-app">
     <template>
@@ -17,71 +14,25 @@
             /* --primary-color: #775D94; */
             --primary-color: purple;
         }
-        
-        #mainContent {
-            margin: 0 auto;
-            max-width: 1440px;
-            height: auto;
-        }
-        
-        paper-item iron-icon {
-            margin-right: 10px;
-        }
-        
-        #drawerHeader {
-            background-color: var(--primary-color);
-            color: white;
-            font-family: 'Sacramento';
-            font-size: 35px;
-            padding-top: 7px;
-        }
-        
-        a {
-            color: inherit;
-            /* blue colors for links too */
-            text-decoration: inherit;
-            /* no underline */
-        }
+
         </style>
         <app-location route="{{route}}" use-hash-as-path></app-location>
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
         </app-route>
-        <paper-drawer-panel force-narrow id="drawer">
-            <paper-header-panel drawer>
-                <iron-selecton>
-                    <paper-item id="drawerHeader">Canela</paper-item>
-                      <paper-item data-page="home" on-tap="changeTab" sectionid="0">
-                          <iron-icon icon="icons:home"></iron-icon>Home
-                      </paper-item>
-                      <template is="dom-repeat" items="{{sections}}">
-                        <paper-item data-page="{{item.name}}" on-tap="changeTab" id="{{item.id}}">{{item.name}}</paper-item>
-                      </template>
-                </iron-selector>
-            </paper-header-panel>
-            <paper-header-panel main>
-                <blackbart-header selected="{{currentTab}}"></blackbart-header>
-                <div id="mainContent">
-                    <iron-pages selected="[[currentPage]]">
-                        <blackbart-home></blackbart-home>
-                        <template is="dom-repeat" items="{{sections}}" >
-                          <blackbart-section image="/assets/images/ladies_outerwear.jpg" title="{{item.name}}"></blackbart-section>                          
-                        </template>        
-                </div>
-                </iron-pages>
-                <blackbart-footer></blackbart-footer>
-                </div>
-            </paper-header-panel>
-        </paper-drawer-panel>
+
+        <iron-pages id="scaffolder" selected="{{pageSelected}}">
+          <blackbart-main-page></blackbart-main-page>
+          <blackbart-product-page></blackbart-product-page>
+          <div>page2</div>
+        </iron-pages>
+
     </template>
     <script>
     Polymer({
 
         is: 'blackbart-app',
-        listeners: {
-            "tab-change": "changeTab",
-            "go-home": "goHome",
-            "toggle-menu": "toggleMenu",
-            "go-to": "goTo"
+        listeners: {         
+            'go-to-page' : 'changePage'
         },
         observerser: [
             "_routeChange(routeData)"
@@ -94,69 +45,30 @@
             currentTab: {
                 type: Number
             },
-            sections: {
-              type: Array,
-              value: [
-                {
-                  name: 'Chaquetas',
-                  id: '1'
-                },
-                {
-                  name: 'Camisas',
-                  id: '2'
-                },
-                {
-                  name: 'Pantalones',
-                  id: '3'
-                },
-                {
-                  name: 'Faldas',
-                  id: '4'
-                },
-                {
-                  name: 'Chaquetas',
-                  id: '5'
-                }
-              ]
-            }
+            pageSelected:{
+              type: Number,
+              value: 0
+            },
+            
         },
-        attached: function(){
-          if (!this.route.path){
-            this.set('route.path','/home');
-          }
+        attached: function() {
+            if (!this.route.path) {
+                this.set('route.path', '/home');
+            }
         },
 
         _routeChange: function(data) {
             console.log(data.page)
         },
 
-        toggleHomeIcon: function(tab) {
-            this.fire("toggle-menu-icon", {
-                currentTab: this.currentTab
-            });
-        },
-
-        toggleMenu: function() {
-            if (window.innerWidth < 480) {
-                this.$.drawer.togglePanel()
-            }
-        },
-
-        goTo: function(event, detail) {
-            this.currentPage = detail.sectionId;
-
-        },
-
-        changeTab: function(event, detail) {
-            this.set('routeData.page', 'section/');
-            detail.tabSelected == undefined ? this.currentPage = event.target.getAttribute('id') : this.currentPage = detail.tabSelected + 1;
-            this.toggleMenu();
-        },
-
-        goHome: function() {
-            this.currentTab = undefined;
-            this.currentPage = 0;
+        changePage: function(event,detail){
+            this.set('route.path', '/' + detail.routeName);
+            this.pageSelected = detail.page;
         }
+
+      
+
+  
 
     });
     </script>

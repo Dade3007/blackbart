@@ -5,6 +5,8 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
 <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
 <dom-module id="blackbart-header">
     <style include="iron-flex"></style>
@@ -45,8 +47,18 @@
             margin: auto;
         }
         
+        .showMenu{
+            display: block;
+        }
+
         paper-button {
             color: var(--primary-color);
+        }
+        
+        #fake {
+            display: inline-block;
+            width: 82.23px;
+            margin: 0 0.29em;
         }
         
         .hide {
@@ -78,12 +90,17 @@
             }
         }
         </style>
+        <app-location route="{{route}}" use-hash-as-path></app-location>
         <div id="header" class="layout horizontal">
+            <div id="fake"></div>
             <paper-button id="iconMenu" class="hide left-content" on-tap="_toggleMenu">
                 <iron-icon icon="icons:menu"></iron-icon>
             </paper-button>
             <paper-button id="iconHome" class="hide left-content" on-tap="_goHome">
                 <iron-icon icon="icons:home"></iron-icon>
+            </paper-button>
+            <paper-button id="iconBack" class="hide left-content" on-tap="_goBack">
+                <iron-icon icon="icons:arrow-back"></iron-icon>
             </paper-button>
             <h1 class="flex" main-title on-tap="_goHome">[[name]]</h1>
             <paper-button>
@@ -103,7 +120,9 @@
         is: 'blackbart-header',
         listeners: {},
         observers: [
-            "_tabChange(selected)"
+            "_tabChange(selected)",
+            "_showMenu(showMenu)",
+            "_routeChange(route)"
         ],
         listeners: {
             "toggle-menu-icon": "_toogleMenuIcon"
@@ -118,20 +137,44 @@
                 notify: true
             }
         },
+        showMenu: {
+            type: Boolean,
+            value: true
+        },
+        _routeChange: function(){
+            if (this.route.path == "/product"){
+                this.$.iconBack.className = this.$.iconBack.className.replace(/hide/, '');
+                this.$.fake.className = this.$.fake.className + ' hide';     
+            }else{
+                this.$.fake.className = this.$.fake.className.replace(/hide/, '');
+                if (this.$.iconBack.className.indexOf('hide') == -1)
+                    this.$.iconBack.className = this.$.iconBack.className + ' hide';   
+            }
+        },
+        _showMenu: function(){
+            if (!this.showMenu.value)
+                this.$.headerTabs.className = this.$.headerTabs.className + ' hide';
+        },
         _toggleMenu: function() {
             this.fire("toggle-menu");
         },
+        _goBack: function(){
+            this.fire("go-to-page", {page: 0, routeName: "home"})
+        },
         _tabChange: function(selected) {
-                if (selected == undefined) {
-                    if (this.$.iconHome.className.indexOf('hide') == -1) {
-                        this.$.iconHome.className = this.$.iconHome.className + ' hide';
-                    }
-                } else {
-                    if (this.$.iconHome.className.indexOf('hide') > -1) {
-                        this.$.iconHome.className = this.$.iconHome.className.replace(/hide/, '');
-                    }
+            if (selected == undefined) {
+                if (this.$.iconHome.className.indexOf('hide') == -1) {
+                    this.$.iconHome.className = this.$.iconHome.className + ' hide';
+                    this.$.fake.className = this.$.fake.className.replace(/hide/, '');
+
                 }
-            
+            } else {
+                if (this.$.iconHome.className.indexOf('hide') > -1) {
+                    this.$.iconHome.className = this.$.iconHome.className.replace(/hide/, '');
+                    this.$.fake.className = this.$.fake.className + ' hide';                    
+                }
+            }
+
             this.fire("tab-change", {
                 tabSelected: this.selected
             })

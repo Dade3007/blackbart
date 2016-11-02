@@ -18,7 +18,7 @@
         <blackbart-header show-menu="false"></blackbart-header>
 
         <div id="pageContent">
-            <div><img src="" alt=""></div>
+            <div><img src="{{product.image}}" alt="{{product.name}}"></div>
             <div>
                 <h2>{{product.name}}</h2>
                 <span>{{product.price}}</span>
@@ -60,10 +60,10 @@
             product: {
                 type: Object,
                 value: {
-                    name: '',
-                    price: '',
-                    image: '',
-                    description: ''
+                    name: 'Ladies Modern Stretch Full Zip',
+                    price: '39.99 €',
+                    image: '/assets/images/10-24102B.jpg',
+                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
                 }
             }
         },

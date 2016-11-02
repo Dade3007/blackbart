@@ -15,17 +15,17 @@
             /* --primary-color: #775D94; */
             --primary-color: purple;
         }
-        
+
         #mainContent {
             margin: 0 auto;
             max-width: 1440px;
             height: auto;
         }
-        
+
         paper-item iron-icon {
             margin-right: 10px;
         }
-        
+
         #drawerHeader {
             background-color: var(--primary-color);
             color: white;
@@ -33,7 +33,7 @@
             font-size: 35px;
             padding-top: 7px;
         }
-        
+
         a {
             color: inherit;
             /* blue colors for links too */
@@ -41,6 +41,8 @@
             /* no underline */
         }
         </style>
+        <app-location route="{{route}}" use-hash-as-path></app-location>
+
         <paper-drawer-panel force-narrow id="drawer">
             <paper-header-panel drawer>
                 <iron-selecton>
@@ -115,10 +117,11 @@
             this.currentPage = 0;
         },
         goTo: function(event, detail) {
+            this.set('route.path', '/section');
             this.currentPage = detail.sectionId;
         },
         changeTab: function(event, detail) {
-            this.set('routeData.page', 'section/' + event.target.getAttribute('data-page'));
+            this.set('route.path', '/section');
             detail.tabSelected == undefined ? this.currentPage = event.target.getAttribute('sectionid') : this.currentPage = detail.tabSelected + 1;
             this.toggleMenu();
         },

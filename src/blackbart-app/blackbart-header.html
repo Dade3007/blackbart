@@ -75,21 +75,28 @@
             #iconHome {
                 display: none;
             }
-            #iconMenu {
+        /*    #iconMenu {
                 display: inline-block;
-            }
+            }  */
             #headerTabs {
                 display: none;
             }
-            .left-content {
+            /* .left-content {
                 text-align: center;
             }
             .left-content iron-icon {
                 position: relative;
                 top: 10px;
-            }
+            } */
             #fake{
                 display: none;
+            }
+
+            #iconBack iron-icon{
+                display: inline-flex;
+                justify-content: center;
+                position: relative;
+                vertical-align: middle;
             }
         }
         </style>
@@ -144,27 +151,40 @@
                 value: true
             }
         },
-
+        _hideIconMenu: function(){
+            if (this.$.iconMenu.className.indexOf('hide') == -1)
+                this.$.iconMenu.className = this.$.iconMenu.className + ' hide';
+        },
+        _hideFakeIcon: function(){
+            if (this.$.fake.className.indexOf('hide') == -1)
+                this.$.fake.className = this.$.fake.className + ' hide';
+        },
+        _hideIconHome: function(){
+            if (this.$.iconHome.className.indexOf('hide') == -1)
+                this.$.iconHome.className = this.$.iconHome.className + ' hide';
+        },
+        _hideIconBack: function(){
+            if (this.$.iconBack.className.indexOf('hide') == -1)
+                this.$.iconBack.className = this.$.iconBack.className + ' hide';
+        },
 
         _routeChange: function(){
             if (this.route.path == "/product"){
                 this.$.iconBack.className = this.$.iconBack.className.replace(/hide/, '');
-                if (this.$.fake.className.indexOf('hide') == -1)
-                    this.$.fake.className = this.$.fake.className + ' hide';
-                if (this.$.iconMenu.className.indexOf('hide') == -1)
-                    this.$.iconMenu.className = this.$.iconMenu.className + ' hide';
+                this._hideFakeIcon();
+                this._hideIconMenu();
+                this._hideIconHome();
             }else if (this.route.path == "/home") {
-                if (this.$.iconHome.className.indexOf('hide') == -1)
-                    this.$.iconHome.className = this.$.iconHome.className + ' hide';
+                this._hideIconHome();
+                this._hideIconBack();
+            }else if (this.route.path == "/section"){
+                this._hideIconBack();
+                this._hideFakeIcon();
+                this.$.iconHome.className = this.$.iconMenu.className.replace(/hide/, '');
             }else{
                 this.$.fake.className = this.$.fake.className.replace(/hide/, '');
                 this.$.iconMenu.className = this.$.iconMenu.className.replace(/hide/, '');
-
-                 if (this.$.iconBack.className.indexOf('hide') == -1)
-                    this.$.iconBack.className = this.$.iconBack.className + ' hide';
-
-                if (this.$.iconBack.className.indexOf('hide') == -1)
-                    this.$.iconBack.className = this.$.iconBack.className + ' hide';
+                this._hideIconBack();
             }
         },
         _showMenu: function(){
@@ -177,23 +197,16 @@
             this.fire("toggle-menu");
         },
         _goBack: function(){
-            this.fire("go-to-page", {page: 0, routeName: "home"})
+            this.fire("go-to-page", {page: 0, routeName: "section"})
         },
         _tabChange: function(selected) {
             if (selected == undefined) {
-                if (this.$.iconHome.className.indexOf('hide') == -1) {
-                    this.$.iconHome.className = this.$.iconHome.className + ' hide';
-                    this.$.fake.className = this.$.fake.className.replace(/hide/, '');
-
-                }
+                this._hideIconHome();
+                this.$.fake.className = this.$.fake.className.replace(/hide/, '');
             } else {
-                if (this.$.iconHome.className.indexOf('hide') > -1) {
-                    this.$.iconHome.className = this.$.iconHome.className.replace(/hide/, '');
-                    if (this.$.fake.className.indexOf('hide') == -1)
-                        this.$.fake.className = this.$.fake.className + ' hide';
-                }
+                //this._hideIconHome();
+                this._hideFakeIcon();
             }
-
             this.fire("tab-change", {
                 tabSelected: this.selected
             })

@@ -180,6 +180,7 @@
             }else if (this.route.path == "/section"){
                 this._hideIconBack();
                 this._hideFakeIcon();
+                this.$.iconMenu.className = this.$.iconMenu.className.replace(/hide/, '');
                 this.$.iconHome.className = this.$.iconMenu.className.replace(/hide/, '');
             }else{
                 this.$.fake.className = this.$.fake.className.replace(/hide/, '');

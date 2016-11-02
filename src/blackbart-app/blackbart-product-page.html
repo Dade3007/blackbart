@@ -7,7 +7,9 @@
 <dom-module id="blackbart-product-page">
     <template>
         <style>
-        :host {
+        :host {}
+
+        #pageContent{
 
         }
 
@@ -42,7 +44,7 @@
 
                 <span>Descripción</span>
                 <p>{{product.description}}</p>
-                <paper-button>COMPRAR</paper-button>
+                <paper-button on-tap="addToCart">COMPRAR</paper-button>
             </div>
         </div>
 
@@ -63,8 +65,11 @@
                     image: '',
                     description: ''
                 }
-
             }
+        },
+
+        addToCart: function(){
+            console.log('addToCart')
         }
 
 

@@ -18,20 +18,20 @@
             --paper-tabs-selection-bar-color: var(--primary-color);
             --paper-tab-ink: var(--primary-color);
         }
-        
+
         paper-toolbar {
             background-color: white;
             color: black;
         }
-        
+
         paper-tab {
             color: var(--primary-color);
         }
-        
+
         #header {
             height: 65px;
         }
-        
+
         h1 {
             color: var(--primary-color);
             font-family: 'Sacramento';
@@ -41,12 +41,12 @@
             display: inline-block;
             text-align: center;
         }
-        
+
         paper-tabs {
             max-width: 1000px;
             margin: auto;
         }
-        
+
         .showMenu{
             display: block;
         }
@@ -54,29 +54,29 @@
         paper-button {
             color: var(--primary-color);
         }
-        
+
         #fake {
             display: inline-block;
             width: 82.23px;
             margin: 0 0.29em;
         }
-        
+
         .hide {
             display: none !important;
         }
-        
+
         @media only screen and (min-device-width: 480px) {
             #iconMenu {
                 display: none;
             }
         }
-        
+
         @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
             #iconHome {
                 display: none;
             }
             #iconMenu {
-                display: inline-block !important;
+                display: inline-block;
             }
             #headerTabs {
                 display: none;
@@ -87,6 +87,9 @@
             .left-content iron-icon {
                 position: relative;
                 top: 10px;
+            }
+            #fake{
+                display: none;
             }
         }
         </style>
@@ -135,25 +138,40 @@
             selected: {
                 type: Object,
                 notify: true
+            },
+            showMenu: {
+                type: Boolean,
+                value: true
             }
         },
-        showMenu: {
-            type: Boolean,
-            value: true
-        },
+
+
         _routeChange: function(){
             if (this.route.path == "/product"){
                 this.$.iconBack.className = this.$.iconBack.className.replace(/hide/, '');
-                this.$.fake.className = this.$.fake.className + ' hide';     
+                if (this.$.fake.className.indexOf('hide') == -1)
+                    this.$.fake.className = this.$.fake.className + ' hide';
+                if (this.$.iconMenu.className.indexOf('hide') == -1)
+                    this.$.iconMenu.className = this.$.iconMenu.className + ' hide';
+            }else if (this.route.path == "/home") {
+                if (this.$.iconHome.className.indexOf('hide') == -1)
+                    this.$.iconHome.className = this.$.iconHome.className + ' hide';
             }else{
                 this.$.fake.className = this.$.fake.className.replace(/hide/, '');
+                this.$.iconMenu.className = this.$.iconMenu.className.replace(/hide/, '');
+
+                 if (this.$.iconBack.className.indexOf('hide') == -1)
+                    this.$.iconBack.className = this.$.iconBack.className + ' hide';
+
                 if (this.$.iconBack.className.indexOf('hide') == -1)
-                    this.$.iconBack.className = this.$.iconBack.className + ' hide';   
+                    this.$.iconBack.className = this.$.iconBack.className + ' hide';
             }
         },
         _showMenu: function(){
-            if (!this.showMenu.value)
+            if (!this.showMenu && this.$.headerTabs.className.indexOf('hide') == -1)
                 this.$.headerTabs.className = this.$.headerTabs.className + ' hide';
+            if (!this.showMenu.value && this.$.iconMenu.className.indexOf('hide') == -1)
+                this.$.iconMenu.className = this.$.iconMenu.className + ' hide';
         },
         _toggleMenu: function() {
             this.fire("toggle-menu");
@@ -171,7 +189,8 @@
             } else {
                 if (this.$.iconHome.className.indexOf('hide') > -1) {
                     this.$.iconHome.className = this.$.iconHome.className.replace(/hide/, '');
-                    this.$.fake.className = this.$.fake.className + ' hide';                    
+                    if (this.$.fake.className.indexOf('hide') == -1)
+                        this.$.fake.className = this.$.fake.className + ' hide';
                 }
             }
 

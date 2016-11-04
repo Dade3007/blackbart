@@ -4,8 +4,6 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="./blackbart-main-page.html">
 <link rel="import" href="./blackbart-product-page.html">
-
-
 <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
 <dom-module id="blackbart-app">
     <template>
@@ -14,25 +12,23 @@
             /* --primary-color: #775D94; */
             --primary-color: purple;
         }
-
         </style>
         <app-location route="{{route}}" use-hash-as-path></app-location>
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
         </app-route>
-
         <iron-pages id="scaffolder" selected="{{pageSelected}}">
-          <blackbart-main-page></blackbart-main-page>
-          <blackbart-product-page></blackbart-product-page>
-          <div>page2</div>
+            <blackbart-main-page></blackbart-main-page>
+            <blackbart-product-page></blackbart-product-page>
+            <div>page2</div>
         </iron-pages>
-
     </template>
     <script>
     Polymer({
 
         is: 'blackbart-app',
         listeners: {
-            'go-to-page' : 'changePage'
+            'go-to-page': 'changePage',
+            "add-to-cart": "_addToCart"
         },
         observerser: [
             "_routeChange(routeData)"
@@ -45,23 +41,28 @@
             currentTab: {
                 type: Number
             },
-            pageSelected:{
-              type: Number,
-              value: 0
+            pageSelected: {
+                type: Number,
+                value: 0
             },
-
+            cart: {
+                type: Object
+            }
         },
         attached: function() {
             if (!this.route.path) {
                 this.set('route.path', '/home');
             }
         },
+        _addToCart: function() {
+            console.log('addToCart');
+        },
 
         _routeChange: function(data) {
             console.log(data.page)
         },
 
-        changePage: function(event,detail){
+        changePage: function(event, detail) {
             this.set('route.path', '/' + detail.routeName);
             this.pageSelected = detail.page;
         }

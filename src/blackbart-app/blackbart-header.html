@@ -6,7 +6,6 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
-
 <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
 <dom-module id="blackbart-header">
     <style include="iron-flex"></style>
@@ -18,20 +17,20 @@
             --paper-tabs-selection-bar-color: var(--primary-color);
             --paper-tab-ink: var(--primary-color);
         }
-
+        
         paper-toolbar {
             background-color: white;
             color: black;
         }
-
+        
         paper-tab {
             color: var(--primary-color);
         }
-
+        
         #header {
             height: 65px;
         }
-
+        
         h1 {
             color: var(--primary-color);
             font-family: 'Sacramento';
@@ -41,58 +40,47 @@
             display: inline-block;
             text-align: center;
         }
-
+        
         paper-tabs {
             max-width: 1000px;
             margin: auto;
         }
-
-        .showMenu{
+        
+        .showMenu {
             display: block;
         }
-
+        
         paper-button {
             color: var(--primary-color);
         }
-
+        
         #fake {
             display: inline-block;
             width: 82.23px;
             margin: 0 0.29em;
         }
-
+        
         .hide {
             display: none !important;
         }
-
+        
         @media only screen and (min-device-width: 480px) {
             #iconMenu {
                 display: none;
             }
         }
-
+        
         @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
             #iconHome {
                 display: none;
             }
-        /*    #iconMenu {
-                display: inline-block;
-            }  */
             #headerTabs {
                 display: none;
             }
-            /* .left-content {
-                text-align: center;
-            }
-            .left-content iron-icon {
-                position: relative;
-                top: 10px;
-            } */
-            #fake{
+            #fake {
                 display: none;
             }
-
-            #iconBack iron-icon{
+            #iconBack iron-icon {
                 display: inline-flex;
                 justify-content: center;
                 position: relative;
@@ -128,7 +116,6 @@
     <script>
     Polymer({
         is: 'blackbart-header',
-        listeners: {},
         observers: [
             "_tabChange(selected)",
             "_showMenu(showMenu)",
@@ -151,44 +138,44 @@
                 value: true
             }
         },
-        _hideIconMenu: function(){
+        _hideIconMenu: function() {
             if (this.$.iconMenu.className.indexOf('hide') == -1)
                 this.$.iconMenu.className = this.$.iconMenu.className + ' hide';
         },
-        _hideFakeIcon: function(){
+        _hideFakeIcon: function() {
             if (this.$.fake.className.indexOf('hide') == -1)
                 this.$.fake.className = this.$.fake.className + ' hide';
         },
-        _hideIconHome: function(){
+        _hideIconHome: function() {
             if (this.$.iconHome.className.indexOf('hide') == -1)
                 this.$.iconHome.className = this.$.iconHome.className + ' hide';
         },
-        _hideIconBack: function(){
+        _hideIconBack: function() {
             if (this.$.iconBack.className.indexOf('hide') == -1)
                 this.$.iconBack.className = this.$.iconBack.className + ' hide';
         },
 
-        _routeChange: function(){
-            if (this.route.path == "/product"){
+        _routeChange: function() {
+            if (this.route.path == "/product") {
                 this.$.iconBack.className = this.$.iconBack.className.replace(/hide/, '');
                 this._hideFakeIcon();
                 this._hideIconMenu();
                 this._hideIconHome();
-            }else if (this.route.path == "/home") {
+            } else if (this.route.path == "/home") {
                 this._hideIconHome();
                 this._hideIconBack();
-            }else if (this.route.path == "/section"){
+            } else if (this.route.path == "/section") {
                 this._hideIconBack();
                 this._hideFakeIcon();
                 this.$.iconMenu.className = this.$.iconMenu.className.replace(/hide/, '');
                 this.$.iconHome.className = this.$.iconMenu.className.replace(/hide/, '');
-            }else{
+            } else {
                 this.$.fake.className = this.$.fake.className.replace(/hide/, '');
                 this.$.iconMenu.className = this.$.iconMenu.className.replace(/hide/, '');
                 this._hideIconBack();
             }
         },
-        _showMenu: function(){
+        _showMenu: function() {
             if (!this.showMenu && this.$.headerTabs.className.indexOf('hide') == -1)
                 this.$.headerTabs.className = this.$.headerTabs.className + ' hide';
             if (!this.showMenu.value && this.$.iconMenu.className.indexOf('hide') == -1)
@@ -197,8 +184,11 @@
         _toggleMenu: function() {
             this.fire("toggle-menu");
         },
-        _goBack: function(){
-            this.fire("go-to-page", {page: 0, routeName: "section"})
+        _goBack: function() {
+            this.fire("go-to-page", {
+                page: 0,
+                routeName: "section"
+            })
         },
         _tabChange: function(selected) {
             if (selected == undefined) {

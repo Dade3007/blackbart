@@ -1,31 +1,133 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
-
-
 <dom-module id="blackbart-product-page">
     <template>
         <style>
         :host {
             text-align: center;
         }
-
-        #pageContent{
-            margin: auto;
-            max-width: 1000px;
-            background-color: red;
+        
+        h2 {
+            font-family: 'Slabo 27px', serif;
+        }
+        
+        #productImage {
+            margin: 20px 30px;
+        }
+        
+        #productImage img {
+            width: 85%;
+        }
+        
+        #pageContent {
+            margin: 80px auto;
+            display: flex;
+        }
+        
+        #pageContent > div {
+            width: 50%;
+            display: inline-block;
+        }
+        
+        #productForm {
+            font-family: 'Roboto', sans-serif;
+            text-align: left;
+            margin: 20px 30px;
+        }
+        
+        #productForm > * {
+            display: block;
+            max-width: 450px;
+            margin: 15px 0px;
+        }
+        
+        h4 {
+            color: #6d6d6d;
+        }
+        
+        #productForm ul {
+            font-family: 'Roboto';
+            font-size: 14px;
+            margin-left: 10px;
+            color: #6d6d6d;
+        }
+        
+        #productForm > #buyDiv {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        paper-button {
+            margin: 30px 0 0 0;
+            border: 1px solid var(--primary-color);
+            width: 100%;
+        }
+        
+        span {
+            font-size: 20px;
+            font-family: 'Slabo 27px', serif;
+        }
+        
+        paper-listbox {
+            min-width: 350px;
         }
 
+        blackbart-header{
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+            #pageContent {
+                display: inline-block;
+                margin: 0px auto 0px auto;
+                padding-bottom: 50px;
+            }
+            #pageContent > div {
+                width: 100%;
+                margin: 0px 0px;
+            }
+            #pageContent > * {
+                margin: 0px;
+            }
+            #productForm {
+                padding: 0 15px;
+                box-sizing: border-box
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+            #productForm > paper-dropdown-menu,
+            #productForm > span {
+                margin: 0px;
+            }
+            #productForm > #buyDiv {
+                position: fixed;
+                bottom: 0px;
+                display: block;
+                width: 100%;
+                left: 0px;
+                margin: 0px;
+            }
+            #productForm > #buyDiv > paper-button {
+                border: 0px;
+                background-color: var(--primary-color);
+                color: white;
+                width: 100%;
+                margin:0px;
+                height: 50px;
+            }
+        }
         </style>
-
         <blackbart-header show-menu="false"></blackbart-header>
-
         <div id="pageContent">
-            <div>
+            <div id="productImage">
                 <img src="{{product.image}}" alt="{{product.name}}">
             </div>
-            <div>
+            <div id="productForm">
                 <h2>{{product.name}}</h2>
                 <span>{{product.price}}</span>
                 <paper-dropdown-menu label="Talla">
@@ -37,7 +139,6 @@
                         <paper-item>XL</paper-item>
                     </paper-listbox>
                 </paper-dropdown-menu>
-
                 <paper-dropdown-menu label="Cantidad">
                     <paper-listbox class="dropdown-content">
                         <paper-item>1</paper-item>
@@ -47,13 +148,21 @@
                         <paper-item>5</paper-item>
                     </paper-listbox>
                 </paper-dropdown-menu>
-
-                <span>Descripción</span>
+                <h3>Descripción</h3>
                 <p>{{product.description}}</p>
-                <paper-button on-tap="addToCart">COMPRAR</paper-button>
+                <h4>Caracteristicas</h4>
+                <ul>
+                    <li>96% cotton, 4% spandex.</li>
+                    <li>Gently contoured silhouette & longer length design for a style that moves with you.</li>
+                    <li>Self-fabric hood.</li>
+                    <li>Dyed-to-match zipper. </li>
+                    <li>Front slash pockets.</li>
+                </ul>
+                <div id="buyDiv">
+                    <paper-button on-tap="addToCart">Añadir al carrito</paper-button>
+                </div>
             </div>
         </div>
-
     </template>
     <script>
     Polymer({
@@ -68,14 +177,14 @@
                 value: {
                     name: 'Ladies Modern Stretch Full Zip',
                     price: '39.99 €',
-                    image: '/assets/images/10-24102B.jpg',
+                    image: '/assets/images/10-24102A.jpg',
                     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
                 }
             }
         },
 
-        addToCart: function(){
-            console.log('addToCart')
+        addToCart: function() {
+            this.fire('add-to-cart');
         }
 
 

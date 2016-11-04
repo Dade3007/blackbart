@@ -7,10 +7,14 @@
 <dom-module id="blackbart-product-page">
     <template>
         <style>
-        :host {}
+        :host {
+            text-align: center;
+        }
 
         #pageContent{
-
+            margin: auto;
+            max-width: 1000px;
+            background-color: red;
         }
 
         </style>
@@ -18,7 +22,9 @@
         <blackbart-header show-menu="false"></blackbart-header>
 
         <div id="pageContent">
-            <div><img src="{{product.image}}" alt="{{product.name}}"></div>
+            <div>
+                <img src="{{product.image}}" alt="{{product.name}}">
+            </div>
             <div>
                 <h2>{{product.name}}</h2>
                 <span>{{product.price}}</span>

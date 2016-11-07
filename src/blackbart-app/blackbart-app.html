@@ -12,29 +12,37 @@
         :host {
             /* --primary-color: #775D94; */
             --primary-color: purple;
+            --blackbart-main-button: {
+                border: 2px solid purple;
+                color: purple;
+                font-weight: bold;
+            }
+            --blackbart-second-button: {
+                border: 2px solid purple;
+                color: white;
+                font-weight: bold;
+                background-color: purple;
+            }
         }
-
+        
         paper-header-panel {
             --paper-header-panel-shadow: {
-              height: 0px;
-              bottom: 0px;
-              box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
-          };
+                height: 0px;
+                bottom: 0px;
+                box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
+            }
         }
-
-
+        
         #mainContent {
             margin: 0 auto;
             max-width: 1440px;
             height: auto;
         }
-
         
-
         paper-item iron-icon {
             margin-right: 10px;
         }
-
+        
         #drawerHeader {
             background-color: var(--primary-color);
             color: white;
@@ -42,13 +50,14 @@
             font-size: 35px;
             padding-top: 7px;
         }
-
+        
         a {
             color: inherit;
             /* blue colors for links too */
             text-decoration: inherit;
             /* no underline */
         }
+
         </style>
         <app-location route="{{route}}" use-hash-as-path></app-location>
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
@@ -66,9 +75,8 @@
                     </iron-selector>
             </paper-header-panel>
             <paper-header-panel main>
-
                 <template is="dom-if" if="{{sections}}">
-                    <blackbart-header sections="{{sections}}"></blackbart-header>
+                    <blackbart-header sections="{{sections}}" selected="{{tabSelected}}"></blackbart-header>
                     <div id="mainContent">
                         <iron-pages id="scaffolder" selected="{{pageSelected}}">
                             <blackbart-main-page current-page="{{mainSelected}}"></blackbart-main-page>
@@ -76,7 +84,6 @@
                             <div>page2</div>
                         </iron-pages>
                     </div>
-                    <blackbart-footer></blackbart-footer>
                 </template>
             </paper-header-panel>
         </paper-drawer-panel>
@@ -88,18 +95,20 @@
         listeners: {
             'go-to-page': 'changePage',
             "add-to-cart": "_addToCart",
-
+            "go-to": "goTo",
             "tab-change": "changeTab",
             "toggle-menu": "toggleMenu",
             "go-home": "goHome"
         },
-        observerser: [
+        observers: [
             "_routeChange(routeData)"
         ],
         properties: {
+         
             mainSelected: {
                 type: Number,
-                value: 0
+                value: 0,
+                notify: true
             },
             currentPage: {
                 type: Number,
@@ -142,9 +151,15 @@
                 this.set('route.path', '/home');
             }
         },
+
+        goTo: function(event, detail) {
+            this.set('route.path', '/section');
+            this.tabSelected = detail.sectionId - 1;
+            this.mainSelected = detail.sectionId;
+        },
         goHome: function() {
-            this.pageSelected = 0;
-            this.mainSelected = 0;
+            //this.pageSelected = 0;
+            //this.mainSelected = 0;
             this.set('route.path', '/home');
         },
         _addToCart: function() {
@@ -152,6 +167,25 @@
         },
 
         _routeChange: function(data) {
+            var page = data.page;
+            if (page !== undefined){
+                switch(page){
+                    case "home":
+                        this.pageSelected = 0;
+                        this.mainSelected = 0;
+                    break;
+                    case "section":
+                        this.pageSelected = 0;
+                       // this.tabSelected = detail.sectionId - 1;
+                       // this.mainSelected = detail.sectionId;
+                    break;
+                    case "product":
+                        this.pageSelected = 1;
+                    break;
+                    default:
+                    break;
+                }
+            }
             console.log(data.page)
         },
 
@@ -175,5 +209,4 @@
         },
     });
     </script>
-
 </dom-module>

@@ -26,6 +26,7 @@
                 <blackbart-section image="/assets/images/ladies_outerwear.jpg" title="{{item.name}}"></blackbart-section>
             </template>
         </iron-pages>
+                            <blackbart-footer></blackbart-footer>
 
     </template>
     <script>
@@ -37,7 +38,6 @@
         ],
         listeners: {
 
-            "go-to": "goTo"
         },
         properties: {
             currentPage: {
@@ -64,13 +64,9 @@
                 }]
             }
         },
-        goTo: function(event, detail) {
-            this.set('route.path', '/section');
-            this.currentPage = detail.sectionId;
-
-        },
+        
         _changeTab: function(currentPage) {
-            this.set('route.path', '/section');
+            this.set('route.path', '/section/' + currentPage);
         },
         toggleHomeIcon: function(tab) {
             this.fire("toggle-menu-icon", {

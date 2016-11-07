@@ -62,15 +62,17 @@
                     </iron-selector>
             </paper-header-panel>
             <paper-header-panel main>
-                <blackbart-header sections="{{sections}}"></blackbart-header>
-                <div id="mainContent">
-                    <iron-pages id="scaffolder" selected="{{pageSelected}}">
-                        <blackbart-main-page current-page="{{mainSelected}}"></blackbart-main-page>
-                        <blackbart-product-page></blackbart-product-page>
-                        <div>page2</div>
-                    </iron-pages>
-                </div>
-                <blackbart-footer></blackbart-footer>
+                <template is="dom-if" if="{{sections}}">
+                    <blackbart-header sections="{{sections}}"></blackbart-header>
+                    <div id="mainContent">
+                        <iron-pages id="scaffolder" selected="{{pageSelected}}">
+                            <blackbart-main-page current-page="{{mainSelected}}"></blackbart-main-page>
+                            <blackbart-product-page></blackbart-product-page>
+                            <div>page2</div>
+                        </iron-pages>
+                    </div>
+                    <blackbart-footer></blackbart-footer>
+                </template>
             </paper-header-panel>
         </paper-drawer-panel>
     </template>

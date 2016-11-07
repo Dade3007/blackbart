@@ -1,3 +1,4 @@
+<script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
@@ -11,6 +12,13 @@
         :host {
             /* --primary-color: #775D94; */
             --primary-color: purple;
+        }
+        paper-header-panel {
+            --paper-header-panel-shadow: {
+              height: 0px;
+              bottom: 0px;
+              box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
+          };
         }
 
         #mainContent {
@@ -92,22 +100,7 @@
             },
             sections: {
                 type: Array,
-                value: [{
-                    name: 'Chaquetas',
-                    id: '1'
-                }, {
-                    name: 'Camisas',
-                    id: '2'
-                }, {
-                    name: 'Pantalones',
-                    id: '3'
-                }, {
-                    name: 'Faldas',
-                    id: '4'
-                }, {
-                    name: 'Bolsos',
-                    id: '5'
-                }]
+                notify: true
             },
             pageSelected: {
                 type: Number,
@@ -117,12 +110,32 @@
                 type: Object
             }
         },
+
+        created: function() {
+            var config = {
+                apiKey: "AIzaSyCnLEqrZMYzJQnyHpr2zZoXT1m4izLxUm8",
+                authDomain: "blackbart-38833.firebaseapp.com",
+                databaseURL: "https://blackbart-38833.firebaseio.com",
+                storageBucket: "blackbart-38833.appspot.com",
+                messagingSenderId: "36667056686"
+            };
+            firebase.initializeApp(config);
+
+            var self = this;
+
+            var sections = firebase.database().ref('/section');
+            sections.on('value', function(snapshot) {
+                self.sections = snapshot.val();
+            });
+
+        },
+
         attached: function() {
             if (!this.route.path) {
                 this.set('route.path', '/home');
             }
         },
-        goHome: function(){
+        goHome: function() {
             this.pageSelected = 0;
             this.mainSelected = 0;
             this.set('route.path', '/home');
@@ -153,5 +166,8 @@
             }
         },
     });
+    </script>
+    <script>
+    // Initialize Firebase
     </script>
 </dom-module>

@@ -140,7 +140,8 @@
                 notify: true
             },
             sections:{
-                type: Array
+                type: Array,
+                notify: true
             }
         },
         _hideIconMenu: function() {
@@ -180,7 +181,6 @@
             }
         },
         _showMenu: function() {
-            console.log('_showMenu');
             if (!this.showMenu && this.$.headerTabs.className.indexOf('hide') == -1)
                 this.$.headerTabs.className = this.$.headerTabs.className + ' hide';
             if (!this.showMenu.value && this.$.iconMenu.className.indexOf('hide') == -1)

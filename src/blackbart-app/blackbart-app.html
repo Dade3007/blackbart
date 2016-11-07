@@ -12,15 +12,60 @@
             /* --primary-color: #775D94; */
             --primary-color: purple;
         }
+
+        #mainContent {
+            margin: 0 auto;
+            max-width: 1440px;
+            height: auto;
+        }
+        
+        paper-item iron-icon {
+            margin-right: 10px;
+        }
+        
+        #drawerHeader {
+            background-color: var(--primary-color);
+            color: white;
+            font-family: 'Sacramento';
+            font-size: 35px;
+            padding-top: 7px;
+        }
+        
+        a {
+            color: inherit;
+            /* blue colors for links too */
+            text-decoration: inherit;
+            /* no underline */
+        }
         </style>
         <app-location route="{{route}}" use-hash-as-path></app-location>
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
         </app-route>
-        <iron-pages id="scaffolder" selected="{{pageSelected}}">
-            <blackbart-main-page></blackbart-main-page>
-            <blackbart-product-page></blackbart-product-page>
-            <div>page2</div>
-        </iron-pages>
+        <paper-drawer-panel force-narrow id="drawer">
+            <paper-header-panel drawer>
+                <iron-selecton>
+                    <paper-item id="drawerHeader">Canela</paper-item>
+                    <paper-item data-page="home" on-tap="changeTab" sectionid="0">
+                        <iron-icon icon="icons:home"></iron-icon>Home
+                    </paper-item>
+                    <template is="dom-repeat" items="{{sections}}">
+                        <paper-item data-page$="{{item.name}}" on-tap="changeTab" sectionid$="{{item.id}}">{{item.name}}</paper-item>
+                    </template>
+                    </iron-selector>
+            </paper-header-panel>
+            <paper-header-panel main>
+                <blackbart-header selected="{{currentTab}}"></blackbart-header>
+                <div id="mainContent">
+                    <iron-pages id="scaffolder" selected="{{pageSelected}}">
+                        <blackbart-main-page currentPage="{{currentPage}}"></blackbart-main-page>
+                        <blackbart-product-page></blackbart-product-page>
+                        <div>page2</div>
+                    </iron-pages>
+                    
+                </div>
+                <blackbart-footer></blackbart-footer>
+            </paper-header-panel>
+        </paper-drawer-panel>
     </template>
     <script>
     Polymer({
@@ -28,7 +73,8 @@
         is: 'blackbart-app',
         listeners: {
             'go-to-page': 'changePage',
-            "add-to-cart": "_addToCart"
+            "add-to-cart": "_addToCart",
+            "tab-change": "changeTab"
         },
         observerser: [
             "_routeChange(routeData)"
@@ -65,6 +111,17 @@
         changePage: function(event, detail) {
             this.set('route.path', '/' + detail.routeName);
             this.pageSelected = detail.page;
+        },
+
+        toggleHomeIcon: function(tab) {
+            this.fire("toggle-menu-icon", {
+                currentTab: this.currentTab
+            });
+        },
+        changeTab: function(event, detail) {
+            this.set('route.path', '/section');
+            detail.tabSelected == undefined ? this.currentPage = event.target.getAttribute('sectionid') : this.currentPage = detail.tabSelected + 1;
+            this.fire('toggle-menu');
         }
     });
     </script>

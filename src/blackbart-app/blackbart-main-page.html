@@ -15,25 +15,28 @@
             /* --primary-color: #775D94; */
             --primary-color: purple;
         }
-        
-        
+
+
         </style>
         <app-location route="{{route}}" use-hash-as-path></app-location>
-        <iron-pages selected="[[currentPage]]">
+
+        <iron-pages selected="{{currentPage}}">
             <blackbart-home></blackbart-home>
             <template is="dom-repeat" items="{{sections}}">
                 <blackbart-section image="/assets/images/ladies_outerwear.jpg" title="{{item.name}}"></blackbart-section>
             </template>
         </iron-pages>
+
     </template>
     <script>
     Polymer({
 
         is: 'blackbart-main-page',
+        observers: [
+            '_changeTab(currentPage)'
+        ],
         listeners: {
-            
-            "toggle-menu": "toggleMenu",
-            "go-home": "goHome",
+
             "go-to": "goTo"
         },
         properties: {
@@ -61,19 +64,19 @@
                 }]
             }
         },
-        toggleMenu: function() {
-            if (window.innerWidth < 480) {
-                this.$.drawer.togglePanel()
-            }
-        },
-        goHome: function() {
-            this.currentTab = undefined;
-            this.currentPage = 0;
-        },
         goTo: function(event, detail) {
             this.set('route.path', '/section');
             this.currentPage = detail.sectionId;
-        }
+
+        },
+        _changeTab: function(currentPage) {
+            this.set('route.path', '/section');
+        },
+        toggleHomeIcon: function(tab) {
+            this.fire("toggle-menu-icon", {
+                currentTab: this.currentTab
+            });
+        },
 
 
     });

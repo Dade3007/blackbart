@@ -1,3 +1,4 @@
+<script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
@@ -13,16 +14,27 @@
             --primary-color: purple;
         }
 
+        paper-header-panel {
+            --paper-header-panel-shadow: {
+              height: 0px;
+              bottom: 0px;
+              box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
+          };
+        }
+
+
         #mainContent {
             margin: 0 auto;
             max-width: 1440px;
             height: auto;
         }
+
         
+
         paper-item iron-icon {
             margin-right: 10px;
         }
-        
+
         #drawerHeader {
             background-color: var(--primary-color);
             color: white;
@@ -30,7 +42,7 @@
             font-size: 35px;
             padding-top: 7px;
         }
-        
+
         a {
             color: inherit;
             /* blue colors for links too */
@@ -54,16 +66,18 @@
                     </iron-selector>
             </paper-header-panel>
             <paper-header-panel main>
-                <blackbart-header selected="{{currentTab}}"></blackbart-header>
-                <div id="mainContent">
-                    <iron-pages id="scaffolder" selected="{{pageSelected}}">
-                        <blackbart-main-page currentPage="{{currentPage}}"></blackbart-main-page>
-                        <blackbart-product-page></blackbart-product-page>
-                        <div>page2</div>
-                    </iron-pages>
-                    
-                </div>
-                <blackbart-footer></blackbart-footer>
+
+                <template is="dom-if" if="{{sections}}">
+                    <blackbart-header sections="{{sections}}"></blackbart-header>
+                    <div id="mainContent">
+                        <iron-pages id="scaffolder" selected="{{pageSelected}}">
+                            <blackbart-main-page current-page="{{mainSelected}}"></blackbart-main-page>
+                            <blackbart-product-page></blackbart-product-page>
+                            <div>page2</div>
+                        </iron-pages>
+                    </div>
+                    <blackbart-footer></blackbart-footer>
+                </template>
             </paper-header-panel>
         </paper-drawer-panel>
     </template>
@@ -74,18 +88,26 @@
         listeners: {
             'go-to-page': 'changePage',
             "add-to-cart": "_addToCart",
-            "tab-change": "changeTab"
+
+            "tab-change": "changeTab",
+            "toggle-menu": "toggleMenu",
+            "go-home": "goHome"
         },
         observerser: [
             "_routeChange(routeData)"
         ],
         properties: {
+            mainSelected: {
+                type: Number,
+                value: 0
+            },
             currentPage: {
                 type: Number,
                 value: 0
             },
-            currentTab: {
-                type: Number
+            sections: {
+                type: Array,
+                notify: true
             },
             pageSelected: {
                 type: Number,
@@ -95,10 +117,35 @@
                 type: Object
             }
         },
+
+        created: function() {
+            var config = {
+                apiKey: "AIzaSyCnLEqrZMYzJQnyHpr2zZoXT1m4izLxUm8",
+                authDomain: "blackbart-38833.firebaseapp.com",
+                databaseURL: "https://blackbart-38833.firebaseio.com",
+                storageBucket: "blackbart-38833.appspot.com",
+                messagingSenderId: "36667056686"
+            };
+            firebase.initializeApp(config);
+
+            var self = this;
+
+            var sections = firebase.database().ref('/section');
+            sections.on('value', function(snapshot) {
+                self.sections = snapshot.val();
+            });
+
+        },
+
         attached: function() {
             if (!this.route.path) {
                 this.set('route.path', '/home');
             }
+        },
+        goHome: function() {
+            this.pageSelected = 0;
+            this.mainSelected = 0;
+            this.set('route.path', '/home');
         },
         _addToCart: function() {
             console.log('addToCart');
@@ -113,16 +160,20 @@
             this.pageSelected = detail.page;
         },
 
-        toggleHomeIcon: function(tab) {
-            this.fire("toggle-menu-icon", {
-                currentTab: this.currentTab
-            });
-        },
+
         changeTab: function(event, detail) {
-            this.set('route.path', '/section');
-            detail.tabSelected == undefined ? this.currentPage = event.target.getAttribute('sectionid') : this.currentPage = detail.tabSelected + 1;
-            this.fire('toggle-menu');
-        }
+            this.pageSelected = 0;
+            detail.tabSelected == undefined ? this.mainSelected = event.target.getAttribute('sectionid') : this.mainSelected = detail.tabSelected + 1;
+
+            this.toggleMenu();
+        },
+
+        toggleMenu: function() {
+            if (window.innerWidth < 480) {
+                this.$.drawer.togglePanel()
+            }
+        },
     });
     </script>
+
 </dom-module>

@@ -9,68 +9,68 @@
         :host {
             text-align: center;
         }
-        
+
         h2 {
             font-family: 'Slabo 27px', serif;
         }
-        
+
         #productImage {
             margin: 20px 30px;
         }
-        
+
         #productImage img {
             width: 85%;
         }
-        
+
         #pageContent {
-            margin: 80px auto;
+            margin: 30px auto;
             display: flex;
         }
-        
+
         #pageContent > div {
             width: 50%;
             display: inline-block;
         }
-        
+
         #productForm {
             font-family: 'Roboto', sans-serif;
             text-align: left;
             margin: 20px 30px;
         }
-        
+
         #productForm > * {
             display: block;
             max-width: 450px;
             margin: 15px 0px;
         }
-        
+
         h4 {
             color: #6d6d6d;
         }
-        
+
         #productForm ul {
             font-family: 'Roboto';
             font-size: 14px;
             margin-left: 10px;
             color: #6d6d6d;
         }
-        
+
         #productForm > #buyDiv {
             margin-top: 30px;
             text-align: center;
         }
-        
+
         paper-button {
             margin: 30px 0 0 0;
             border: 1px solid var(--primary-color);
             width: 100%;
         }
-        
+
         span {
             font-size: 20px;
             font-family: 'Slabo 27px', serif;
         }
-        
+
         paper-listbox {
             min-width: 350px;
         }
@@ -79,7 +79,7 @@
             width: 100%;
             overflow: hidden;
         }
-        
+
         @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
             #pageContent {
                 display: inline-block;
@@ -126,7 +126,6 @@
             }
         }
         </style>
-        <blackbart-header show-menu="false"></blackbart-header>
         <div id="pageContent">
             <div id="productImage">
                 <img src="{{product.image}}" alt="{{product.name}}">
@@ -180,6 +179,7 @@
                 type: Object,
                 value: {
                     name: 'Ladies Modern Stretch Full Zip',
+                    id: '1',
                     price: '39.99 €',
                     image: '/assets/images/10-24102A.jpg',
                     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
@@ -188,7 +188,7 @@
         },
 
         addToCart: function() {
-            this.fire('add-to-cart');
+            this.fire('add-to-cart', {product: this.product});
         }
 
 

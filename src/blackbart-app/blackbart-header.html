@@ -17,20 +17,20 @@
             --paper-tabs-selection-bar-color: var(--primary-color);
             --paper-tab-ink: var(--primary-color);
         }
-        
+
         paper-toolbar {
             background-color: white;
             color: black;
         }
-        
+
         paper-tab {
             color: var(--primary-color);
         }
-        
+
         #header {
             height: 65px;
         }
-        
+
         h1 {
             color: var(--primary-color);
             font-family: 'Sacramento';
@@ -40,36 +40,36 @@
             display: inline-block;
             text-align: center;
         }
-        
+
         paper-tabs {
             max-width: 1000px;
             margin: auto;
         }
-        
+
         .showMenu {
             display: block;
         }
-        
+
         paper-button {
             color: var(--primary-color);
         }
-        
+
         #fake {
             display: inline-block;
             width: 82.23px;
             margin: 0 0.29em;
         }
-        
+
         .hide {
             display: none !important;
         }
-        
+
         @media only screen and (min-device-width: 480px) {
             #iconMenu {
                 display: none;
             }
         }
-        
+
         @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
             #iconHome {
                 display: none;
@@ -89,6 +89,8 @@
         }
         </style>
         <app-location route="{{route}}" use-hash-as-path></app-location>
+        <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
+        </app-route>
         <div id="header" class="layout horizontal">
             <div id="fake"></div>
             <paper-button id="iconMenu" class="hide left-content" on-tap="_toggleMenu">
@@ -106,11 +108,10 @@
             </paper-button>
         </div>
         <paper-tabs id="headerTabs" selected="{{selected}}">
-            <paper-tab>Chaquetas</paper-tab>
-            <paper-tab>Camisas</paper-tab>
-            <paper-tab>Faldas</paper-tab>
-            <paper-tab>Blusas</paper-tab>
-            <paper-tab>Bolsos</paper-tab>
+            <template is="dom-repeat" items="{{sections}}">
+                <paper-tab>{{item.name}}</paper-tab>
+            </template>
+
         </paper-tabs>
     </template>
     <script>
@@ -135,7 +136,11 @@
             },
             showMenu: {
                 type: Boolean,
-                value: true
+                value: true,
+                notify: true
+            },
+            sections:{
+                type: Array
             }
         },
         _hideIconMenu: function() {
@@ -154,7 +159,6 @@
             if (this.$.iconBack.className.indexOf('hide') == -1)
                 this.$.iconBack.className = this.$.iconBack.className + ' hide';
         },
-
         _routeChange: function() {
             if (this.route.path == "/product") {
                 this.$.iconBack.className = this.$.iconBack.className.replace(/hide/, '');
@@ -176,6 +180,7 @@
             }
         },
         _showMenu: function() {
+            console.log('_showMenu');
             if (!this.showMenu && this.$.headerTabs.className.indexOf('hide') == -1)
                 this.$.headerTabs.className = this.$.headerTabs.className + ' hide';
             if (!this.showMenu.value && this.$.iconMenu.className.indexOf('hide') == -1)
@@ -203,6 +208,7 @@
             })
         },
         _goHome: function() {
+            this.selected = undefined;
             this.fire("go-home");
         }
     });

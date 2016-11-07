@@ -16,67 +16,25 @@
             --primary-color: purple;
         }
 
-        #mainContent {
-            margin: 0 auto;
-            max-width: 1440px;
-            height: auto;
-        }
-
-        paper-item iron-icon {
-            margin-right: 10px;
-        }
-
-        #drawerHeader {
-            background-color: var(--primary-color);
-            color: white;
-            font-family: 'Sacramento';
-            font-size: 35px;
-            padding-top: 7px;
-        }
-
-        a {
-            color: inherit;
-            /* blue colors for links too */
-            text-decoration: inherit;
-            /* no underline */
-        }
         </style>
         <app-location route="{{route}}" use-hash-as-path></app-location>
 
-        <paper-drawer-panel force-narrow id="drawer">
-            <paper-header-panel drawer>
-                <iron-selecton>
-                    <paper-item id="drawerHeader">Canela</paper-item>
-                    <paper-item data-page="home" on-tap="changeTab" sectionid="0">
-                        <iron-icon icon="icons:home"></iron-icon>Home
-                    </paper-item>
-                    <template is="dom-repeat" items="{{sections}}">
-                        <paper-item data-page$="{{item.name}}" on-tap="changeTab" sectionid$="{{item.id}}">{{item.name}}</paper-item>
-                    </template>
-                    </iron-selector>
-            </paper-header-panel>
-            <paper-header-panel main>
-                <blackbart-header selected="{{currentTab}}"></blackbart-header>
-                <div id="mainContent">
-                    <iron-pages selected="[[currentPage]]">
-                        <blackbart-home></blackbart-home>
-                        <template is="dom-repeat" items="{{sections}}">
-                            <blackbart-section image="/assets/images/ladies_outerwear.jpg" title="{{item.name}}"></blackbart-section>
-                        </template>
-                    </iron-pages>
-                </div>
-                <blackbart-footer></blackbart-footer>
-            </paper-header-panel>
-        </paper-drawer-panel>
+        <iron-pages selected="{{currentPage}}">
+            <blackbart-home></blackbart-home>
+            <template is="dom-repeat" items="{{sections}}">
+                <blackbart-section image="/assets/images/ladies_outerwear.jpg" title="{{item.name}}"></blackbart-section>
+            </template>
+        </iron-pages>
+
     </template>
     <script>
     Polymer({
 
         is: 'blackbart-main-page',
+        observers: [
+            '_changeTab(currentPage)'
+        ],
         listeners: {
-            "tab-change": "changeTab",
-            "toggle-menu": "toggleMenu",
-            "go-home": "goHome",
             "go-to": "goTo"
         },
         properties: {
@@ -107,23 +65,12 @@
                 }]
             }
         },
-        toggleMenu: function() {
-            if (window.innerWidth < 480) {
-                this.$.drawer.togglePanel()
-            }
-        },
-        goHome: function() {
-            this.currentTab = undefined;
-            this.currentPage = 0;
-        },
         goTo: function(event, detail) {
             this.set('route.path', '/section');
             this.currentPage = detail.sectionId;
         },
-        changeTab: function(event, detail) {
+        _changeTab: function(currentPage) {
             this.set('route.path', '/section');
-            detail.tabSelected == undefined ? this.currentPage = event.target.getAttribute('sectionid') : this.currentPage = detail.tabSelected + 1;
-            this.toggleMenu();
         },
         toggleHomeIcon: function(tab) {
             this.fire("toggle-menu-icon", {

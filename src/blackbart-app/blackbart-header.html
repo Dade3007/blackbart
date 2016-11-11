@@ -52,6 +52,11 @@
 
         paper-button {
             color: var(--primary-color);
+            margin: 0px;
+        }
+
+        paper-icon{
+            margin: 0px;
         }
 
         #fake {
@@ -119,7 +124,7 @@
             </paper-button>
         </div>
         <paper-tabs id="headerTabs" selected="{{selected}}">
-            <template is="dom-repeat" items="{{sections}}">
+            <template is="dom-repeat" items="{{_toArray(sections)}}">
                 <paper-tab>{{item.name}}</paper-tab>
             </template>
 
@@ -155,6 +160,7 @@
                 notify: true
             }
         },
+       
         _hideIconMenu: function() {
             if (this.$.iconMenu.className.indexOf('hide') == -1)
                 this.$.iconMenu.className = this.$.iconMenu.className + ' hide';
@@ -221,6 +227,14 @@
         _goHome: function() {
             this.selected = undefined;
             this.fire("go-home");
+        },
+        _toArray: function(obj) {
+            return Object.keys(obj).map(function(key) {
+                return {
+                    name: key,
+                    value: obj[key]
+                };
+            });
         }
     });
     </script>

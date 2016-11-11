@@ -69,21 +69,22 @@
                     <paper-item data-page="home" on-tap="changeTab" sectionid="0">
                         <iron-icon icon="icons:home"></iron-icon>Home
                     </paper-item>
-                    <template is="dom-repeat" items="{{sections}}">
-                        <paper-item data-page$="{{item.name}}" on-tap="changeTab" sectionid$="{{item.id}}">{{item.name}}</paper-item>
+                    <template is="dom-repeat" items="{{_toArray(sections)}}">
+                        <paper-item data-page$="{{item.value.name}}" on-tap="changeTab" sectionid$="{{_count()}}">{{item.value.name}}</paper-item>
                     </template>
                     </iron-selector>
             </paper-header-panel>
             <paper-header-panel main>
-                <template is="dom-if" if="{{sections}}">
+                <template is="dom-if" if="{{_toArray(sections)}}">
                     <blackbart-header sections="{{sections}}" selected="{{tabSelected}}"></blackbart-header>
                     <div id="mainContent">
                         <iron-pages id="scaffolder" selected="{{pageSelected}}">
-                            <blackbart-main-page current-page="{{mainSelected}}"></blackbart-main-page>
+                            <blackbart-main-page sections="{{sections}}" current-page="{{mainSelected}}"></blackbart-main-page>
                             <blackbart-product-page></blackbart-product-page>
                             <div>page2</div>
                         </iron-pages>
                     </div>
+
                 </template>
             </paper-header-panel>
         </paper-drawer-panel>
@@ -115,7 +116,7 @@
                 value: 0
             },
             sections: {
-                type: Array,
+                type: Object,
                 notify: true
             },
             pageSelected: {
@@ -124,7 +125,16 @@
             },
             cart: {
                 type: Object
+            },
+            index: {
+                type: Number,
+                value: 0
             }
+        },
+
+        _count: function(){
+            this.index++;
+            return this.index;
         },
 
         created: function() {
@@ -140,7 +150,7 @@
             var self = this;
 
             var sections = firebase.database().ref('/section');
-            sections.on('value', function(snapshot) {
+            sections.orderByChild('id').on('value', function(snapshot) {
                 self.sections = snapshot.val();
             });
 
@@ -186,7 +196,7 @@
                     break;
                 }
             }
-            console.log(data.page)
+            //console.log(data.page)
         },
 
         changePage: function(event, detail) {
@@ -207,6 +217,14 @@
                 this.$.drawer.togglePanel()
             }
         },
+        _toArray: function(obj) {
+            return Object.keys(obj).map(function(key) {
+                return {
+                    name: key,
+                    value: obj[key]
+                };
+            });
+        }
     });
     </script>
 </dom-module>

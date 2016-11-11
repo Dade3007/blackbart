@@ -22,11 +22,11 @@
 
         <iron-pages selected="{{currentPage}}">
             <blackbart-home></blackbart-home>
-            <template is="dom-repeat" items="{{sections}}">
-                <blackbart-section image="/assets/images/ladies_outerwear.jpg" title="{{item.name}}"></blackbart-section>
+            <template is="dom-repeat" items="{{_toArray(sections)}}">
+                <blackbart-section section-data="{{item}}"></blackbart-section>
             </template>
         </iron-pages>
-        <blackbart-footer></blackbart-footer>
+        <!--blackbart-footer></blackbart-footer-->
 
     </template>
     <script>
@@ -45,26 +45,18 @@
                 value: 0
             },
             sections: {
-                type: Array,
-                value: [{
-                    name: 'Chaquetas',
-                    id: '1'
-                }, {
-                    name: 'Camisas',
-                    id: '2'
-                }, {
-                    name: 'Pantalones',
-                    id: '3'
-                }, {
-                    name: 'Faldas',
-                    id: '4'
-                }, {
-                    name: 'Chaquetas',
-                    id: '5'
-                }]
+                type: Object,
+                notify: true                
             }
         },
-
+        _toArray: function(obj) {
+            return Object.keys(obj).map(function(key) {
+                return {
+                    name: key,
+                    value: obj[key]
+                };
+            });
+        },
         _changeTab: function(currentPage) {
             if( currentPage != 0)
             this.set('route.path', '/section/' + currentPage);

@@ -42,23 +42,16 @@
 
     </style>
 
-    <img src="[[image]]" alt="[[title]]" class="sm-hide">
+    <img src="[[sectionData.value.image]]" alt="[[sectionData.name]]" class="sm-hide">
     <div id="productsHeader">
-      <span>[[title]]</span>
+      <span>[[sectionData.name]]</span>
       <span id="counter">(9 productos)</span>
     </div>
     <div id="productsContainer">
-      <blackbart-product-card image="/assets/images/10-24102B.jpg" title="Ladies Modern Stretch Full Zip" price="39.99 €" productid="1"></blackbart-product-card>
-      <blackbart-product-card image="https://firebasestorage.googleapis.com/v0/b/blackbart-38833.appspot.com/o/assets%2Fimages%2F10-25058B.jpg?alt=media&token=b2687d8d-4672-4c2d-b27e-bd785b4f1a63" title="Ladies Colorblock Wind Jacket" price="44.99 €" productid="1"></blackbart-product-card>
-      <blackbart-product-card image="/assets/images/10-24101B.jpg" title="Ladies Voyage Fleece Jacket" price="39.99 €" productid="1"></blackbart-product-card>
-
-      <blackbart-product-card image="/assets/images/10-24102B.jpg" title="Ladies Modern Stretch Full Zip" price="39.99 €" productid="1"></blackbart-product-card>
-      <blackbart-product-card image="https://firebasestorage.googleapis.com/v0/b/blackbart-38833.appspot.com/o/assets%2Fimages%2F10-25058B.jpg?alt=media&token=b2687d8d-4672-4c2d-b27e-bd785b4f1a63" title="Ladies Colorblock Wind Jacket" price="44.99 €" productid="1"></blackbart-product-card>
-      <blackbart-product-card image="/assets/images/10-24101B.jpg" title="Ladies Voyage Fleece Jacket" price="39.99 €" productid="1"></blackbart-product-card>
-
-      <blackbart-product-card image="/assets/images/10-24102B.jpg" title="Ladies Modern Stretch Full Zip" price="39.99 €" productid="1"></blackbart-product-card>
-      <blackbart-product-card image="https://firebasestorage.googleapis.com/v0/b/blackbart-38833.appspot.com/o/assets%2Fimages%2F10-25058B.jpg?alt=media&token=b2687d8d-4672-4c2d-b27e-bd785b4f1a63" title="Ladies Colorblock Wind Jacket" price="44.99 €" productid="1"></blackbart-product-card>
-      <blackbart-product-card image="/assets/images/10-24101B.jpg" title="Ladies Voyage Fleece Jacket" price="39.99 €" productid="1"></blackbart-product-card>
+      <template is="dom-repeat" items="{{_toArray(sectionData.value.products)}}">
+        <blackbart-product-card image="{{item.value.image}}" title="{{item.value.description}}" price="{{item.value.price}}" productid="{{item.value.id}}"></blackbart-product-card>
+      </template>
+     
     </div>
 
 
@@ -71,9 +64,23 @@
       is: 'blackbart-section',
 
       properties: {
-        title: String,
-        image: String
-      }
+        sectionData: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      _toArray: function(obj) {
+            return Object.keys(obj).map(function(key) {
+                return {
+                    name: key,
+                    value: obj[key]
+                };
+            });
+        },
+         attached: function(){
+            console.log(this.sectionData);
+        },
 
     });
 

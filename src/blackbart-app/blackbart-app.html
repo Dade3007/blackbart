@@ -24,7 +24,7 @@
                 background-color: purple;
             }
         }
-        
+
         paper-header-panel {
             --paper-header-panel-shadow: {
                 height: 0px;
@@ -32,17 +32,17 @@
                 box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
             }
         }
-        
+
         #mainContent {
             margin: 0 auto;
             max-width: 1440px;
             height: auto;
         }
-        
+
         paper-item iron-icon {
             margin-right: 10px;
         }
-        
+
         #drawerHeader {
             background-color: var(--primary-color);
             color: white;
@@ -50,7 +50,7 @@
             font-size: 35px;
             padding-top: 7px;
         }
-        
+
         a {
             color: inherit;
             /* blue colors for links too */
@@ -104,7 +104,7 @@
             "_routeChange(routeData)"
         ],
         properties: {
-         
+
             mainSelected: {
                 type: Number,
                 value: 0,
@@ -199,11 +199,11 @@
             this.pageSelected = 0;
             detail.tabSelected == undefined ? this.mainSelected = event.target.getAttribute('sectionid') : this.mainSelected = detail.tabSelected + 1;
 
-            this.toggleMenu();
+            this.$.drawer.closeDrawer()
         },
 
         toggleMenu: function() {
-            if (window.innerWidth < 480) {
+            if (window.innerWidth <= 480) {
                 this.$.drawer.togglePanel()
             }
         },

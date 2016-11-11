@@ -64,23 +64,34 @@
             display: none !important;
         }
 
+        #iconMenu{
+            text-align: center;
+            padding: 20px 0;
+        }
+
         @media only screen and (min-device-width: 480px) {
-            #iconMenu {
+            #iconMenu{
                 display: none;
             }
         }
 
-        @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
-            #iconHome {
-                display: none;
+        @media only screen and (max-device-width: 480px) {
+
+            #iconMenu{
+                display: inline-block;
             }
+
+            #iconHome{
+                display:  none;
+            }
+
             #headerTabs {
                 display: none;
             }
             #fake {
                 display: none;
             }
-            #iconBack iron-icon {
+            #iconBack iron-icon{
                 display: inline-flex;
                 justify-content: center;
                 position: relative;
@@ -161,15 +172,15 @@
                 this.$.iconBack.className = this.$.iconBack.className + ' hide';
         },
         _routeChange: function() {
-            if (this.route.path == "/product") {
+            if (this.routeData.page == "product") {
                 this.$.iconBack.className = this.$.iconBack.className.replace(/hide/, '');
                 this._hideFakeIcon();
                 this._hideIconMenu();
                 this._hideIconHome();
-            } else if (this.route.path == "/home") {
+            } else if (this.routeData.page == "home") {
                 this._hideIconHome();
                 this._hideIconBack();
-            } else if (this.route.path == "/section") {
+            } else if (this.routeData.page == "section") {
                 this._hideIconBack();
                 this._hideFakeIcon();
                 this.$.iconMenu.className = this.$.iconMenu.className.replace(/hide/, '');

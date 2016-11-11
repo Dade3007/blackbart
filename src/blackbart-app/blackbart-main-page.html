@@ -26,7 +26,7 @@
                 <blackbart-section image="/assets/images/ladies_outerwear.jpg" title="{{item.name}}"></blackbart-section>
             </template>
         </iron-pages>
-                            <blackbart-footer></blackbart-footer>
+        <blackbart-footer></blackbart-footer>
 
     </template>
     <script>
@@ -64,8 +64,9 @@
                 }]
             }
         },
-        
+
         _changeTab: function(currentPage) {
+            if( currentPage != 0)
             this.set('route.path', '/section/' + currentPage);
         },
         toggleHomeIcon: function(tab) {

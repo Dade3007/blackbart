@@ -6,6 +6,11 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+
+<link rel="import" href="./blackbart-cart-button.html">
+
+
+
 <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
 <dom-module id="blackbart-header">
     <style include="iron-flex"></style>
@@ -119,8 +124,8 @@
                 <iron-icon icon="icons:arrow-back"></iron-icon>
             </paper-button>
             <h1 class="flex" main-title>[[name]]</h1>
-            <paper-button>
-                <iron-icon icon="icons:shopping-cart"></iron-icon>
+            <paper-button on-tap="_goCart">
+                <blackbart-cart-button counter="{{cartItems}}"></blackbart-cart-button>
             </paper-button>
         </div>
         <paper-tabs id="headerTabs" selected="{{selected}}">
@@ -148,16 +153,16 @@
             },
             selected: {
                 type: Number,
-                notify: true
             },
             showMenu: {
                 type: Boolean,
                 value: true,
-                notify: true
             },
             sections:{
                 type: Array,
-                notify: true
+            },
+            cartItems:{
+                type: Number
             }
         },
        
@@ -191,7 +196,11 @@
                 this._hideFakeIcon();
                 this.$.iconMenu.className = this.$.iconMenu.className.replace(/hide/, '');
                 this.$.iconHome.className = this.$.iconMenu.className.replace(/hide/, '');
-            } else {
+            } else if (this.routeData.page == "cart"){
+                this.$.iconBack.className = this.$.iconBack.className.replace(/hide/, '');
+                this._hideIconHome();
+                this._hideFakeIcon();
+            }else{
                 this.$.fake.className = this.$.fake.className.replace(/hide/, '');
                 this.$.iconMenu.className = this.$.iconMenu.className.replace(/hide/, '');
                 this._hideIconBack();
@@ -227,6 +236,9 @@
         _goHome: function() {
             this.selected = undefined;
             this.fire("go-home");
+        },
+        _goCart: function() {
+            this.fire("go-cart");
         },
         _toArray: function(obj) {
             return Object.keys(obj).map(function(key) {

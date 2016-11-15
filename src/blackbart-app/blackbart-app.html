@@ -5,6 +5,7 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="./blackbart-main-page.html">
 <link rel="import" href="./blackbart-product-page.html">
+<link rel="import" href="./blackbart-cart-page.html">
 <link rel="import" href="./blackbart-globals.html">
 <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
 <dom-module id="blackbart-app">
@@ -78,7 +79,7 @@
             </paper-header-panel>
             <paper-header-panel main>
                 <template is="dom-if" if="{{_toArray(sections)}}">
-                    <blackbart-header sections="{{sections}}" selected="{{tabSelected}}"></blackbart-header>
+                    <blackbart-header cart-items="{{cartItems}}" sections="{{sections}}" selected="{{tabSelected}}"></blackbart-header>
                     <div id="mainContent">
                         <iron-pages id="scaffolder" selected="{{pageSelected}}">
                             <blackbart-main-page sections="{{sections}}" current-page="{{mainSelected}}"></blackbart-main-page>
@@ -102,7 +103,8 @@
             "go-to": "goTo",
             "tab-change": "changeTab",
             "toggle-menu": "toggleMenu",
-            "go-home": "goHome"
+            "go-home": "goHome",
+            "go-cart": "goCart"
         },
         observers: [
             "_changeSections(sections)",
@@ -138,6 +140,10 @@
             products: {
                 type: Object,
 
+            },
+            cartItems: {
+                type: Number,
+                value: 0
             }
         },
 
@@ -178,6 +184,9 @@
             this.tabSelected = detail.sectionId - 1;
             this.mainSelected = detail.sectionId;
         },
+        goCart: function() {
+            this.set('route.path', '/cart');
+        },
         goHome: function() {
             this.set('route.path', '/home');
         },
@@ -189,7 +198,10 @@
 
             this.cart.push(pedido);
 
+            this.cartItems = this.cart.length;
+
             console.log('addToCart');
+            console.log(this.cartItems);
         },
 
         _routeChange: function(data) {
@@ -205,11 +217,12 @@
                     break;
                     case "product":
                         this.pageSelected = 1;                        
-                        this.selectedProductId = this.route.path.split("/")[2]
-
+                        this.selectedProductId = this.route.path.split("/")[2];
                         if (this.products != undefined)
                             this.selectedProduct = this.products[this.route.path.split("/")[2]]
-
+                    break;
+                    case "cart":
+                        this.pageSelected = 2;
                     break;
                     default:
                     break;

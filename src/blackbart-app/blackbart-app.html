@@ -83,6 +83,7 @@
                         <iron-pages id="scaffolder" selected="{{pageSelected}}">
                             <blackbart-main-page sections="{{sections}}" current-page="{{mainSelected}}"></blackbart-main-page>
                             <blackbart-product-page product="{{selectedProduct}}"></blackbart-product-page>
+                            <blackbart-cart-page></blackbart-cart-page>
                             <div>page2</div>
                         </iron-pages>
                     </div>
@@ -127,7 +128,8 @@
                 value: 0
             },
             cart: {
-                type: Object
+                type: Array,
+                value: []
             },
             index: {
                 type: Number,
@@ -179,7 +181,14 @@
         goHome: function() {
             this.set('route.path', '/home');
         },
-        _addToCart: function() {
+        _addToCart: function(event, detail) {
+            var pedido = {};
+            pedido.talla = detail.talla; 
+            pedido.cantidad = detail.cantidad;
+            pedido.product = detail.product.value;
+
+            this.cart.push(pedido);
+
             console.log('addToCart');
         },
 

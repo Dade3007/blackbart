@@ -3,6 +3,12 @@
 <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+
+<link rel="import" href="../../bower_components/iron-validatable-behavior/iron-validatable-behavior.html">
+
 <link rel="import" href="./blackbart-globals.html">
 
 <dom-module id="blackbart-product-page">
@@ -149,24 +155,26 @@
             <div id="productForm">
                 <h2>{{product.name}}</h2>
                 <span>{{product.value.price}}</span>
-                <paper-dropdown-menu label="Talla">
-                    <paper-listbox class="dropdown-content">
-                        <paper-item>XS</paper-item>
-                        <paper-item>S</paper-item>
-                        <paper-item>M</paper-item>
-                        <paper-item>L</paper-item>
-                        <paper-item>XL</paper-item>
-                    </paper-listbox>
-                </paper-dropdown-menu>
-                <paper-dropdown-menu label="Cantidad">
-                    <paper-listbox class="dropdown-content">
-                        <paper-item>1</paper-item>
-                        <paper-item>2</paper-item>
-                        <paper-item>3</paper-item>
-                        <paper-item>4</paper-item>
-                        <paper-item>5</paper-item>
-                    </paper-listbox>
-                </paper-dropdown-menu>
+                <form is="iron-form" id="productForm">
+                    <paper-dropdown-menu label="Talla" id="talla" required>
+                        <paper-listbox class="dropdown-content" selected="{{tallaSelected}}">
+                            <paper-item>XS</paper-item>
+                            <paper-item>S</paper-item>
+                            <paper-item>M</paper-item>
+                            <paper-item>L</paper-item>
+                            <paper-item>XL</paper-item>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                    <paper-dropdown-menu label="Cantidad" id="cantidad" required>
+                        <paper-listbox class="dropdown-content" selected="{{cantidadSelected}}">
+                            <paper-item>1</paper-item>
+                            <paper-item>2</paper-item>
+                            <paper-item>3</paper-item>
+                            <paper-item>4</paper-item>
+                            <paper-item>5</paper-item>
+                        </paper-listbox>
+                    </paper-dropdown-menu>
+                </form>
                 <h3>Descripción</h3>
                 <p>{{product.value.description}}</p>
                 <h4>Caracteristicas</h4>
@@ -190,6 +198,7 @@
         listeners: {
 
         },
+        behaviors: [Polymer.IronValidatableBehavior],
         observers: [
             "_changeRoute(route)",
             "_changeProduct(product)"
@@ -198,30 +207,43 @@
             product: {
                 type: Object,
                 notify: true
+            },
+            tallaSelected: {
+                type: Number,
+                notify: true
             }
         },
 
         addToCart: function() {
-            this.fire('add-to-cart', {
-                product: this.product
-            });
+            //FIXME: NO MUY ELEGANTE; PERO NO CONSIGO VALIDAR EL FORM
+            var a = this.$.talla.validate();
+            var b = this.$.cantidad.validate()
+            if (a && b){
+                  this.fire('add-to-cart', {
+                    product: this.product,
+                    talla: this.$.talla.value,
+                    cantidad: this.$.cantidad.value
+                });
+            }
+           
+          
         },
         _changeRoute: function(route){
-            console.log(this.route);
-            console.log(this.$.globals);
 
-            //console.log(this.subroute.path);
+            if (route.path.indexOf('product') != -1){      
+
+                this.tallaSelected = null;
+                this.cantidadSelected = null;
+            }
+
+            //console.log(this.route);
+            //console.log(this.$.globals);
+
         },
         _changeProduct: function(){
-
             console.log(this.product)
         }
-        /* ready: function(){
-            console.log(this.subroute.path.replace("/",""));
 
-            var a = this.$.globals.products;
-            console.log(a);
-        }, */
 
     });
     </script>

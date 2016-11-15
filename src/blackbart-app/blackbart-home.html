@@ -28,11 +28,11 @@
     </style>
 
     <template is="dom-repeat" items="{{sections.big}}">
-      <blackbart-home-card section="{{item.name}}" image="{{item.img}}" sectionid="{{item.sectionId}}"></blackbart-home-card>
+      <blackbart-home-card section="{{item.name}}" image="{{item.img}}" sectionid="{{_count()}}"></blackbart-home-card>
     </template>
   
     <template is="dom-repeat" items="{{sections.small}}">
-      <blackbart-home-card section="{{item.name}}" image="{{item.img}}" sectionid="{{item.sectionId}}" class="small"></blackbart-home-card>
+      <blackbart-home-card section="{{item.name}}" image="{{item.img}}" sectionid="{{_count()}}" class="small"></blackbart-home-card>
     </template>
     
   </template>
@@ -81,8 +81,19 @@
               }
             ]
           }
-        }
+        },
+        index: {
+          type: Number,
+          value: 0
+          }
       },
+
+      _count: function(){
+        this.index++;
+        return this.index;
+      }
+
+      
 
     });
 

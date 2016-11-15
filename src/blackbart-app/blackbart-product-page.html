@@ -3,6 +3,8 @@
 <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="./blackbart-globals.html">
+
 <dom-module id="blackbart-product-page">
     <template>
         <style>
@@ -137,13 +139,16 @@
             }
         }
         </style>
+        <blackbart-globals id="globals" values="{{values}}"></blackbart-globals>
+        <app-location route="{{route}}" use-hash-as-path></app-location>
+        <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
         <div id="pageContent">
             <div id="productImage">
-                <img src="{{product.image}}" alt="{{product.name}}">
+                <img src="{{product.value.image}}" alt="{{product.value.name}}">
             </div>
             <div id="productForm">
                 <h2>{{product.name}}</h2>
-                <span>{{product.price}}</span>
+                <span>{{product.value.price}}</span>
                 <paper-dropdown-menu label="Talla">
                     <paper-listbox class="dropdown-content">
                         <paper-item>XS</paper-item>
@@ -163,7 +168,7 @@
                     </paper-listbox>
                 </paper-dropdown-menu>
                 <h3>Descripción</h3>
-                <p>{{product.description}}</p>
+                <p>{{product.value.description}}</p>
                 <h4>Caracteristicas</h4>
                 <ul>
                     <li>96% cotton, 4% spandex.</li>
@@ -185,16 +190,14 @@
         listeners: {
 
         },
+        observers: [
+            "_changeRoute(route)",
+            "_changeProduct(product)"
+        ],
         properties: {
             product: {
                 type: Object,
-                value: {
-                    name: 'Ladies Modern Stretch Full Zip',
-                    id: '1',
-                    price: '39.99 €',
-                    image: '/assets/images/10-24102A.jpg',
-                    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                }
+                notify: true
             }
         },
 
@@ -202,10 +205,23 @@
             this.fire('add-to-cart', {
                 product: this.product
             });
+        },
+        _changeRoute: function(route){
+            console.log(this.route);
+            console.log(this.$.globals);
+
+            //console.log(this.subroute.path);
+        },
+        _changeProduct: function(){
+
+            console.log(this.product)
         }
+        /* ready: function(){
+            console.log(this.subroute.path.replace("/",""));
 
-
-
+            var a = this.$.globals.products;
+            console.log(a);
+        }, */
 
     });
     </script>

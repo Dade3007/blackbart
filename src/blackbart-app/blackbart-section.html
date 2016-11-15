@@ -45,11 +45,11 @@
     <img src="[[sectionData.value.image]]" alt="[[sectionData.name]]" class="sm-hide">
     <div id="productsHeader">
       <span>[[sectionData.name]]</span>
-      <span id="counter">(9 productos)</span>
+      <span id="counter">([[numberOfElements]] productos)</span>
     </div>
     <div id="productsContainer">
       <template is="dom-repeat" items="{{_toArray(sectionData.value.products)}}">
-        <blackbart-product-card image="{{item.value.image}}" title="{{item.value.description}}" price="{{item.value.price}}" productid="{{item.value.id}}"></blackbart-product-card>
+        <blackbart-product-card product="{{item.value}}"></blackbart-product-card>
       </template>
      
     </div>
@@ -79,8 +79,8 @@
             });
         },
          attached: function(){
-            console.log(this.sectionData);
-        },
+          this.numberOfElements = this._toArray(this.sectionData.value.products).length;
+        }
 
     });
 

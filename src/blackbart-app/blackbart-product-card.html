@@ -50,11 +50,11 @@
 
     </style>
 
-   <div id="container" on-tap="showProduct" productid$="{{productid}}">
-    <img src="[[image]]" alt="[[title]]">
+   <div id="container" on-tap="showProduct" productid="{{product.id}}">
+    <img src="[[product.image_large]]" alt="[[product.description]]">
     <div>
-      <span id="description">[[title]]</span>
-      <span>[[price]]</span>
+      <span id="description">[[product.description]]</span>
+      <span>[[product.price]]</span>
     </div>
    </div>
 
@@ -66,14 +66,14 @@
       is: 'blackbart-product-card',
 
       properties: {
-        title: String,
-        image: String,
-        price: String,
-        productid: String
-      },
+        product: {
+          type: Object,
+          notify: true
+        }
+      },   
 
       showProduct: function(){
-        this.fire('go-to-page', {page: 1, routeName: "product"});
+        this.fire('go-to-page', {page: 1, routeName: "product/"+ this.product.productId});
       }
 
     });

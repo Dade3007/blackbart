@@ -5,6 +5,7 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="./blackbart-main-page.html">
 <link rel="import" href="./blackbart-product-page.html">
+<link rel="import" href="./blackbart-globals.html">
 <link href="https://fonts.googleapis.com/css?family=Sacramento" rel="stylesheet">
 <dom-module id="blackbart-app">
     <template>
@@ -59,6 +60,7 @@
         }
 
         </style>
+        <blackbart-globals id="globals" values="{{values}}"></blackbart-globals>
         <app-location route="{{route}}" use-hash-as-path></app-location>
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}">
         </app-route>
@@ -80,7 +82,7 @@
                     <div id="mainContent">
                         <iron-pages id="scaffolder" selected="{{pageSelected}}">
                             <blackbart-main-page sections="{{sections}}" current-page="{{mainSelected}}"></blackbart-main-page>
-                            <blackbart-product-page></blackbart-product-page>
+                            <blackbart-product-page product="{{selectedProduct}}"></blackbart-product-page>
                             <div>page2</div>
                         </iron-pages>
                     </div>
@@ -102,6 +104,7 @@
             "go-home": "goHome"
         },
         observers: [
+            "_changeSections(sections)",
             "_routeChange(routeData)"
         ],
         properties: {
@@ -129,6 +132,10 @@
             index: {
                 type: Number,
                 value: 0
+            },
+            products: {
+                type: Object,
+
             }
         },
 
@@ -137,29 +144,31 @@
             return this.index;
         },
 
-        created: function() {
-            var config = {
-                apiKey: "AIzaSyCnLEqrZMYzJQnyHpr2zZoXT1m4izLxUm8",
-                authDomain: "blackbart-38833.firebaseapp.com",
-                databaseURL: "https://blackbart-38833.firebaseio.com",
-                storageBucket: "blackbart-38833.appspot.com",
-                messagingSenderId: "36667056686"
-            };
+        attached: function() {
+            if (!this.route.path) {
+                this.set('route.path', '/home');
+            }
+            var config = this.$.globals.firebaseConfig
             firebase.initializeApp(config);
 
             var self = this;
 
             var sections = firebase.database().ref('/section');
             sections.orderByChild('id').on('value', function(snapshot) {
-                self.sections = snapshot.val();
+                self.sections = snapshot.val();             
             });
-
         },
-
-        attached: function() {
-            if (!this.route.path) {
-                this.set('route.path', '/home');
+        _changeSections: function(){
+            var array = this._toArray(this.sections);
+            this.$.globals.products = {};
+            for (var a=0; a <= array.length-1; a++){
+                var sectionProducts = this._toArray(array[a].value.products)
+                for (var e=0; e <= sectionProducts.length-1; e++){
+                    this.$.globals.products[sectionProducts[e].value.productId] = sectionProducts[e];                    
+                }
             }
+            this.products = this.$.globals.products;
+            this.selectedProduct = this.products[this.selectedProductId]
         },
 
         goTo: function(event, detail) {
@@ -168,8 +177,6 @@
             this.mainSelected = detail.sectionId;
         },
         goHome: function() {
-            //this.pageSelected = 0;
-            //this.mainSelected = 0;
             this.set('route.path', '/home');
         },
         _addToCart: function() {
@@ -186,11 +193,14 @@
                     break;
                     case "section":
                         this.pageSelected = 0;
-                       // this.tabSelected = detail.sectionId - 1;
-                       // this.mainSelected = detail.sectionId;
                     break;
                     case "product":
-                        this.pageSelected = 1;
+                        this.pageSelected = 1;                        
+                        this.selectedProductId = this.route.path.split("/")[2]
+
+                        if (this.products != undefined)
+                            this.selectedProduct = this.products[this.route.path.split("/")[2]]
+
                     break;
                     default:
                     break;

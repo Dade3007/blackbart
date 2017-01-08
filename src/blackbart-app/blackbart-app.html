@@ -26,7 +26,7 @@
                 background-color: purple;
             }
         }
-
+        
         paper-header-panel {
             --paper-header-panel-shadow: {
                 height: 0px;
@@ -34,17 +34,17 @@
                 box-shadow: inset 0px 0px 6px 0px rgba(0, 0, 0, 0.4);
             }
         }
-
+        
         #mainContent {
             margin: 0 auto;
             max-width: 1440px;
             height: auto;
         }
-
+        
         paper-item iron-icon {
             margin-right: 10px;
         }
-
+        
         #drawerHeader {
             background-color: var(--primary-color);
             color: white;
@@ -53,13 +53,16 @@
             padding-top: 7px;
         }
 
+        iron-pages{
+            padding-top: 115px;
+        }
+        
         a {
             color: inherit;
             /* blue colors for links too */
             text-decoration: inherit;
             /* no underline */
         }
-
         </style>
         <blackbart-globals id="globals" values="{{values}}"></blackbart-globals>
         <app-location route="{{route}}" use-hash-as-path></app-location>
@@ -79,16 +82,16 @@
             </paper-header-panel>
             <paper-header-panel main>
                 <template is="dom-if" if="{{_toArray(sections)}}">
+
                     <blackbart-header cart-items="{{cartItems}}" sections="{{sections}}" selected="{{tabSelected}}"></blackbart-header>
                     <div id="mainContent">
                         <iron-pages id="scaffolder" selected="{{pageSelected}}">
                             <blackbart-main-page sections="{{sections}}" current-page="{{mainSelected}}"></blackbart-main-page>
                             <blackbart-product-page product="{{selectedProduct}}"></blackbart-product-page>
-                            <blackbart-cart-page></blackbart-cart-page>
+                            <blackbart-cart-page cart="{{cart}}"></blackbart-cart-page>
                             <div>page2</div>
                         </iron-pages>
                     </div>
-
                 </template>
             </paper-header-panel>
         </paper-drawer-panel>
@@ -131,7 +134,8 @@
             },
             cart: {
                 type: Array,
-                value: []
+                value: [],
+                notify: true
             },
             index: {
                 type: Number,
@@ -147,7 +151,7 @@
             }
         },
 
-        _count: function(){
+        _count: function() {
             this.index++;
             return this.index;
         },
@@ -163,16 +167,16 @@
 
             var sections = firebase.database().ref('/section');
             sections.orderByChild('id').on('value', function(snapshot) {
-                self.sections = snapshot.val();             
+                self.sections = snapshot.val();
             });
         },
-        _changeSections: function(){
+        _changeSections: function() {
             var array = this._toArray(this.sections);
             this.$.globals.products = {};
-            for (var a=0; a <= array.length-1; a++){
+            for (var a = 0; a <= array.length - 1; a++) {
                 var sectionProducts = this._toArray(array[a].value.products)
-                for (var e=0; e <= sectionProducts.length-1; e++){
-                    this.$.globals.products[sectionProducts[e].value.productId] = sectionProducts[e];                    
+                for (var e = 0; e <= sectionProducts.length - 1; e++) {
+                    this.$.globals.products[sectionProducts[e].value.productId] = sectionProducts[e];
                 }
             }
             this.products = this.$.globals.products;
@@ -192,40 +196,53 @@
         },
         _addToCart: function(event, detail) {
             var pedido = {};
-            pedido.talla = detail.talla; 
+            pedido.talla = detail.talla;
             pedido.cantidad = detail.cantidad;
             pedido.product = detail.product.value;
-
+            // To notify change
             this.cart.push(pedido);
+            var aux = [];
+            aux = aux.concat(this.cart);
+            this.cart = aux;
 
             this.cartItems = this.cart.length;
 
-            console.log('addToCart');
-            console.log(this.cartItems);
+            sessionStorage.setItem('cart', JSON.stringify(this.cart));
+
+
+        },
+
+        ready: function(){
+            var sessionCart = sessionStorage.getItem('cart');
+            if (sessionCart){
+                this.cart = JSON.parse(sessionCart);
+                this.cartItems = this.cart.length;
+            }
+
         },
 
         _routeChange: function(data) {
             var page = data.page;
-            if (page !== undefined){
-                switch(page){
+            if (page !== undefined) {
+                switch (page) {
                     case "home":
                         this.pageSelected = 0;
                         this.mainSelected = 0;
-                    break;
+                        break;
                     case "section":
                         this.pageSelected = 0;
-                    break;
+                        break;
                     case "product":
-                        this.pageSelected = 1;                        
+                        this.pageSelected = 1;
                         this.selectedProductId = this.route.path.split("/")[2];
                         if (this.products != undefined)
                             this.selectedProduct = this.products[this.route.path.split("/")[2]]
-                    break;
+                        break;
                     case "cart":
                         this.pageSelected = 2;
-                    break;
+                        break;
                     default:
-                    break;
+                        break;
                 }
             }
             //console.log(data.page)
